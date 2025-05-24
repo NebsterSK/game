@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Base extends Component
@@ -10,19 +9,13 @@ class Base extends Component
     public array $messages = [];
 
     public int $builders = 0;
-
-//    public function decreaseBuilders(): void
-//    {
-//        $this->builders--;
-//    }
-//
-//    public function increaseBuilders(): void
-//    {
-//        $this->builders++;
-//    }
+    public int $engineers = 0;
+    public int $scientists = 0;
 
     public function endTurn(): void
     {
+        $this->messages = [];
+
         $this->messages[] = 'Last day we did...';
     }
 }
