@@ -1,5 +1,5 @@
-@extends('_layouts/main')
+@extends('layouts.main')
 
 @section('content')
-    <livewire:base />
+    <livewire:base/>
 @endsection
