@@ -1,14 +1,12 @@
 <?php
 
-use App\Http\Controllers\GameController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return 1;
-})->name('index');
+Route::get('/', [PageController::class, 'index'] )->name('index');
+
+// Auth
+Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard')->middleware('auth');
+Route::get('/game', [PageController::class, 'game'])->name('game')->middleware('auth');
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::get('/game', [GameController::class, 'index'])->name('game');

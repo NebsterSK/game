@@ -3,17 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-
-    <!-- Scripts -->
     @vite('resources/sass/app.scss')
 </head>
 <body>
@@ -30,13 +21,15 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('home') }}">Dashboard</a>
-                        </li>
+                        @auth
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('game') }}">Game</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('game') }}">Game</a>
+                            </li>
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -61,6 +54,10 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item disabled" href="">Profile</a>
+
+                                    <hr class="dropdown-divider">
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
