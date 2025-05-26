@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class PageController extends Controller
@@ -14,11 +16,19 @@ class PageController extends Controller
 
     public function dashboard(): View
     {
-        return view('dashboard');
+        $cities = Auth::user()->cities()->get();
+
+        return view('dashboard')->with([
+            'cities' => $cities,
+        ]);
     }
 
-    public function game(): View
+    public function city(City $city): View
     {
-        return view('game');
+        // TODO: Auth
+
+        return view('city')->with([
+            'city' => $city,
+        ]);
     }
 }
