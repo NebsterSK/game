@@ -2,6 +2,6 @@
 
 @section('content')
     <div class="container">
-        <livewire:city city="{{ $city->id }}"/>
+        <livewire:city cityId="{{ $city->id }}"/>
     </div>
 @endsection

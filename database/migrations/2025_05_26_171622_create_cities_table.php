@@ -12,6 +12,10 @@ return new class extends Migration
             $table->uuid('id');
             $table->string('name', 20);
             $table->unsignedInteger('turn')->nullable(false)->default(0);
+            $table->unsignedInteger('population')->nullable(false)->default(100);
+            $table->unsignedInteger('builders')->nullable(false)->default(0);
+            $table->unsignedInteger('engineers')->nullable(false)->default(0);
+            $table->unsignedInteger('scientists')->nullable(false)->default(0);
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 

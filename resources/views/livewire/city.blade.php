@@ -1,7 +1,10 @@
+@use(App\Enums\PopulationType)
+@use(Illuminate\Support\Carbon)
+
 <div>
     <h1>{{ $this->city->name }}</h1>
 
-    <p>Turn: {{ $this->city->turn }}</p>
+    <p>Turn: {{ $this->city->turn }} | Earth date: {{ Carbon::make('2028-02-18')->addDays($this->city->turn * 10)->toDateString() }}</p>
 
     <hr>
 
@@ -13,51 +16,65 @@
 
     <hr>
 
+    <p>Population: {{ $this->population }}</p>
+
     <p>
         Builders
 
-        <button x-on:click="$wire.builders--">-</button>
-        <input wire:model="builders" type="number" disabled />
-        <button x-on:click="$wire.builders++">+</button>
+        <button wire:click="decrement('{{ PopulationType::Builder->value }}')" class="btn btn-secondary">-</button>
+        <input value="{{ $this->builders }}" type="number" min="0" disabled />
+        <button wire:click="increment('{{ PopulationType::Builder->value }}')" class="btn btn-secondary">+</button>
 
-        <select>
-            <option value="">Housing</option>
-            <option value="">Workshop</option>
-            <option value="">Laboratory</option>
-            <option value="">Headquarters</option>
-            <option value="">Warehouse</option>
-        </select>
+{{--        <select>--}}
+{{--            <option value="">Housing</option>--}}
+{{--            <option value="">Workshop</option>--}}
+{{--            <option value="">Laboratory</option>--}}
+{{--            <option value="">Headquarters</option>--}}
+{{--            <option value="">Warehouse</option>--}}
+{{--        </select>--}}
     </p>
 
     <p>
         Engineers
 
-        <button x-on:click="$wire.engineers--">-</button>
-        <input wire:model="engineers" type="number" disabled />
-        <button x-on:click="$wire.engineers++">+</button>
+        <button wire:click="decrement('{{ PopulationType::Engineer->value }}')" class="btn btn-secondary">-</button>
+        <input value="{{ $this->engineers }}" type="number" min="0" disabled />
+        <button wire:click="increment('{{ PopulationType::Engineer->value }}')" class="btn btn-secondary">+</button>
 
-        <select>
-            <option value="">Solar panels</option>
-            <option value="">Antena</option>
-            <option value="">Telescope</option>
-            <option value="">Rover</option>
-        </select>
+{{--        <select>--}}
+{{--            <option value="">Solar panels</option>--}}
+{{--            <option value="">Antena</option>--}}
+{{--            <option value="">Telescope</option>--}}
+{{--            <option value="">Rover</option>--}}
+{{--        </select>--}}
     </p>
 
     <p>
         Scientists
 
-        <button x-on:click="$wire.scientists--">-</button>
-        <input wire:model="scientists" type="number" disabled />
-        <button x-on:click="$wire.scientists++">+</button>
+        <button wire:click="decrement('{{ PopulationType::Scientist->value }}')" class="btn btn-secondary">-</button>
+        <input value="{{ $this->scientists }}" type="number" min="0" disabled />
+        <button wire:click="increment('{{ PopulationType::Scientist->value }}')" class="btn btn-secondary">+</button>
 
-        <select>
-            <option value="">Soil samples</option>
-            <option value="">Atmosphere composition</option>
-        </select>
+{{--        <select>--}}
+{{--            <option value="">Soil samples</option>--}}
+{{--            <option value="">Atmosphere composition</option>--}}
+{{--        </select>--}}
     </p>
 
     <hr>
 
-    <button wire:click="endTurn">End turn</button>
+    <div class="d-flex justify-content-between">
+        <button
+            wire:click="resetCity"
+            wire:confirm="Sure?"
+            class="btn btn-danger"
+        >Reset city</button>
+
+        <button
+            wire:click="endTurn"
+            wire:loading.attr="disabled"
+            class="btn btn-primary"
+        >End turn</button>
+    </div>
 </div>
