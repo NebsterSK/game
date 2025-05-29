@@ -2,22 +2,30 @@
 
 namespace App\Livewire;
 
+use App\Enums\AssetType;
 use App\Enums\PopulationType;
+use App\Models\Asset;
 use App\Models\City as CityModel;
+use App\Models\CityAsset;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 /**
  * @property CityModel $city
  */
-class City extends Component
+class Game extends Component
 {
     public string $cityId;
 
-    public int $population = 10;
-    public int $builders = 0;
-    public int $engineers = 0;
-    public int $scientists = 0;
+    public int $population;
+    public int $builders;
+    public int $engineers;
+    public int $scientists;
+
+    public Collection $buildings;
+    public int $chosenBuildingId = 0;
 
     public function mount(): void
     {
@@ -25,6 +33,9 @@ class City extends Component
         $this->builders = $this->city->builders;
         $this->engineers = $this->city->engineers;
         $this->scientists = $this->city->scientists;
+
+        $assets = Asset::get();
+        $this->buildings = $assets->where('type', AssetType::Building->value);
     }
 
     #[Computed]
@@ -97,6 +108,8 @@ class City extends Component
 
     public function endTurn(): void
     {
+        Session::remove('messages');
+
         $this->city->update([
             'turn' => $this->city->turn + 1,
             'population' => $this->population,
@@ -104,10 +117,48 @@ class City extends Component
             'engineers' => $this->engineers,
             'scientists' => $this->scientists,
         ]);
+
+        // Building
+        if ($this->chosenBuildingId !== 0) {
+            $progress = $this->builders * 10;
+            $buildingInProgress = CityAsset::where([
+                'city_id' => $this->cityId,
+                'asset_id' => $this->chosenBuildingId,
+            ])->with('asset')->first();
+            $newProgress = ($buildingInProgress->xp ?? 0) + $progress;
+
+            if ($buildingInProgress) {
+                if ($newProgress >= $buildingInProgress->asset->xp) {
+                    $xp = $buildingInProgress->asset->xp;
+
+                    Session::push('messages', 'We finished building ...');
+                } else {
+                    $xp = $newProgress;
+
+                    Session::push('messages', 'We built ...');
+                }
+
+                $buildingInProgress->update([
+                    'xp' => $xp,
+                ]);
+            } else {
+                CityAsset::create([
+                    'city_id' => $this->cityId,
+                    'asset_id' => $this->chosenBuildingId,
+                    'xp' => $progress,
+                ]);
+
+                Session::push('messages', 'We built ...');
+            }
+        } else {
+            Session::push('messages', 'We didn\'t build anything.');
+        }
     }
 
     public function resetCity(): void
     {
+        Session::remove('messages');
+
         $this->city->update([
             'turn' => 0,
             'population' => 10,
@@ -116,6 +167,8 @@ class City extends Component
             'scientists' => 0,
         ]);
 
-        $this->reset();
+        $this->city->cityAssets()->delete();
+
+        $this->mount();
     }
 }

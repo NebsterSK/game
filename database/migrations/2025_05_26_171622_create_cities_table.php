@@ -9,10 +9,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cities', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->string('name', 20);
             $table->unsignedInteger('turn')->nullable(false)->default(0);
-            $table->unsignedInteger('population')->nullable(false)->default(100);
+            $table->unsignedInteger('population')->nullable(false)->default(10);
             $table->unsignedInteger('builders')->nullable(false)->default(0);
             $table->unsignedInteger('engineers')->nullable(false)->default(0);
             $table->unsignedInteger('scientists')->nullable(false)->default(0);
