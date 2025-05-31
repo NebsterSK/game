@@ -36,8 +36,15 @@ return new class extends Migration
                 'id' => 3,
                 'name' => 'Laboratory',
                 'type' => AssetType::Building->value,
-                'xp' => 200,
+                'xp' => 250,
                 'parent_id' => 1,
+            ],
+            [
+                'id' => 4,
+                'name' => 'Soil samples',
+                'type' => AssetType::Technology->value,
+                'xp' => 150,
+                'parent_id' => null,
             ],
         ]);
     }

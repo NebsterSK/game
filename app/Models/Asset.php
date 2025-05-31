@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * 
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property int|null $parent_id
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CityAsset> $cities
  * @property-read int|null $cities_count
+ * @property-read \App\Models\CityAsset|null $cityAsset
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset query()
@@ -38,5 +40,10 @@ class Asset extends Model
     public function cities(): BelongsToMany
     {
         return $this->belongsToMany(CityAsset::class, 'city_asset')->withPivot(['xp']);
+    }
+
+    public function cityAsset(): HasOne
+    {
+        return $this->hasOne(CityAsset::class);
     }
 }

@@ -29,7 +29,7 @@
                         class="btn btn-outline-secondary"
                 >+</button>
 
-                <label class="input-group-text" for="inputGroupSelect01">work on</label>
+                <label class="input-group-text">work on</label>
 
                 <select
                         wire:model="chosenBuildingId"
@@ -38,17 +38,52 @@
                 >
                     <option value="0">Nothing</option>
                     @foreach($this->buildings as $building)
-                        <option wire:key="{{ $building->id }}" value="{{ $building->id }}">{{ $building->name }} | Progress: ? / {{ $building->xp }}</option>
+                        <option wire:key="{{ $building->id }}" value="{{ $building->id }}">{{ $building->name }} | Progress: {{ $building->cityAsset->xp ?? 0 }} / {{ $building->xp }}</option>
                     @endforeach
                 </select>
             </div>
+
+            @if($this->workshopIsBuilt)
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Engineers</span>
+
+                    <button
+                            wire:click="decrement('{{ PopulationType::Engineer->value }}')"
+                            wire:loading.attr="disabled"
+                            class="btn btn-outline-secondary"
+                    >-</button>
+
+                    <span class="input-group-text">{{ $this->engineers }}</span>
+
+                    <button
+                            wire:click="increment('{{ PopulationType::Engineer->value }}')"
+                            wire:loading.attr="disabled"
+                            class="btn btn-outline-secondary"
+                    >+</button>
+
+                    <label class="input-group-text">work on</label>
+
+                    <select
+                            wire:model="chosenTechnologyId"
+                            wire:loading.attr="disabled"
+                            class="form-select"
+                    >
+                        <option value="0">Nothing</option>
+                        @foreach($this->technologies as $technology)
+                            <option wire:key="{{ $technology->id }}" value="{{ $technology->id }}">{{ $technology->name }} | Progress: {{ $technology->cityAsset->xp ?? 0 }} / {{ $technology->xp }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            @endif
         </div>
 
         <div class="col-6">
             @if(\Illuminate\Support\Facades\Session::has('messages'))
-                @foreach(\Illuminate\Support\Facades\Session::get('messages') as $message)
-                    <p>{{ $message }}</p>
-                @endforeach
+                <ul>
+                    @foreach(\Illuminate\Support\Facades\Session::get('messages') as $message)
+                        <li>{{ $message }}</li>
+                    @endforeach
+                </ul>
             @endif
         </div>
     </div>

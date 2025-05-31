@@ -5,15 +5,17 @@ namespace App\Livewire;
 use App\Enums\AssetType;
 use App\Enums\PopulationType;
 use App\Models\Asset;
-use App\Models\City as CityModel;
+use App\Models\City;
 use App\Models\CityAsset;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 /**
- * @property CityModel $city
+ * @property City $city
  */
 class Game extends Component
 {
@@ -24,8 +26,8 @@ class Game extends Component
     public int $engineers;
     public int $scientists;
 
-    public Collection $buildings;
     public int $chosenBuildingId = 0;
+    public int $chosenTechnologyId = 0;
 
     public function mount(): void
     {
@@ -33,15 +35,56 @@ class Game extends Component
         $this->builders = $this->city->builders;
         $this->engineers = $this->city->engineers;
         $this->scientists = $this->city->scientists;
-
-        $assets = Asset::get();
-        $this->buildings = $assets->where('type', AssetType::Building->value);
     }
 
     #[Computed]
-    public function city(): CityModel
+    public function city(): City
     {
-        return CityModel::find($this->cityId);
+        return City::find($this->cityId);
+    }
+
+    #[Computed]
+    public function buildings(): Collection
+    {
+        $finishedBuildings = Asset::where('type', AssetType::Building->value)
+            ->whereRelation('cityAsset', 'city_asset.xp', '=', DB::raw('assets.xp'))
+            ->get('id')
+            ->pluck('id');
+
+        return Asset::with('cityAsset')
+            ->where('type', AssetType::Building->value)
+            ->whereNotIn('id', $finishedBuildings)
+            ->where(function (Builder $q) use ($finishedBuildings) {
+                $q->whereIn('parent_id', $finishedBuildings)
+                    ->orWhereNull('parent_id');
+            })
+            ->get();
+    }
+
+    #[Computed]
+    public function technologies(): Collection
+    {
+        $finishedTechnologies = Asset::where('type', AssetType::Technology->value)
+            ->whereRelation('cityAsset', 'city_asset.xp', '=', DB::raw('assets.xp'))
+            ->get('id')
+            ->pluck('id');
+
+        return Asset::with('cityAsset')
+            ->where('type', AssetType::Technology->value)
+            ->whereNotIn('id', $finishedTechnologies)
+            ->where(function (Builder $q) use ($finishedTechnologies) {
+                $q->whereIn('parent_id', $finishedTechnologies)
+                    ->orWhereNull('parent_id');
+            })
+            ->get();
+    }
+
+    #[Computed]
+    public function workshopIsBuilt(): bool
+    {
+        return Asset::where('id', 2)
+            ->whereRelation('cityAsset', 'city_asset.xp', '=', DB::raw('assets.xp'))
+            ->exists();
     }
 
     public function increment(string $type): void
@@ -118,6 +161,10 @@ class Game extends Component
             'scientists' => $this->scientists,
         ]);
 
+        if ($this->population > 0) {
+            Session::push('messages', 'We have available population that is not assigned to any role.');
+        }
+
         // Building
         if ($this->chosenBuildingId !== 0) {
             $progress = $this->builders * 10;
@@ -131,27 +178,29 @@ class Game extends Component
                 if ($newProgress >= $buildingInProgress->asset->xp) {
                     $xp = $buildingInProgress->asset->xp;
 
-                    Session::push('messages', 'We finished building ...');
+                    Session::push('messages', 'Builders finished building ' . $buildingInProgress->asset->name . '.');
                 } else {
                     $xp = $newProgress;
 
-                    Session::push('messages', 'We built ...');
+                    Session::push('messages', 'Builders built ' . $xp . ' of ' . $buildingInProgress->asset->name . '.');
                 }
 
                 $buildingInProgress->update([
                     'xp' => $xp,
                 ]);
             } else {
-                CityAsset::create([
+                $cityAsset = CityAsset::create([
                     'city_id' => $this->cityId,
                     'asset_id' => $this->chosenBuildingId,
                     'xp' => $progress,
                 ]);
 
-                Session::push('messages', 'We built ...');
+                $cityAsset->load('asset');
+
+                Session::push('messages', 'Builders built ' . $progress . ' of ' . $cityAsset->asset->name . '.');
             }
         } else {
-            Session::push('messages', 'We didn\'t build anything.');
+            Session::push('messages', 'Builders didn\'t build anything.');
         }
     }
 
