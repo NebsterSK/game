@@ -52,6 +52,7 @@ class Game extends Component
             ->pluck('id');
 
         return Asset::with('cityAsset')
+
             ->where('type', AssetType::Building->value)
             ->whereNotIn('id', $finishedBuildings)
             ->where(function (Builder $q) use ($finishedBuildings) {
@@ -70,6 +71,7 @@ class Game extends Component
             ->pluck('id');
 
         return Asset::with('cityAsset')
+
             ->where('type', AssetType::Technology->value)
             ->whereNotIn('id', $finishedTechnologies)
             ->where(function (Builder $q) use ($finishedTechnologies) {
@@ -83,6 +85,7 @@ class Game extends Component
     public function workshopIsBuilt(): bool
     {
         return Asset::where('id', 2)
+
             ->whereRelation('cityAsset', 'city_asset.xp', '=', DB::raw('assets.xp'))
             ->exists();
     }
@@ -182,7 +185,7 @@ class Game extends Component
                 } else {
                     $xp = $newProgress;
 
-                    Session::push('messages', 'Builders built ' . $xp . ' of ' . $buildingInProgress->asset->name . '.');
+                    Session::push('messages', 'Builders built ' . $progress . ' of ' . $buildingInProgress->asset->name . '.');
                 }
 
                 $buildingInProgress->update([
@@ -201,6 +204,44 @@ class Game extends Component
             }
         } else {
             Session::push('messages', 'Builders didn\'t build anything.');
+        }
+
+        // Technology
+        if ($this->chosenTechnologyId !== 0) {
+            $progress = $this->engineers * 10;
+            $technologyInProgress = CityAsset::where([
+                'city_id' => $this->cityId,
+                'asset_id' => $this->chosenTechnologyId,
+            ])->with('asset')->first();
+            $newProgress = ($technologyInProgress->xp ?? 0) + $progress;
+
+            if ($technologyInProgress) {
+                if ($newProgress >= $technologyInProgress->asset->xp) {
+                    $xp = $technologyInProgress->asset->xp;
+
+                    Session::push('messages', 'Engineers finished researching ' . $technologyInProgress->asset->name . '.');
+                } else {
+                    $xp = $newProgress;
+
+                    Session::push('messages', 'Builders researched ' . $progress . ' of ' . $technologyInProgress->asset->name . '.');
+                }
+
+                $technologyInProgress->update([
+                    'xp' => $xp,
+                ]);
+            } else {
+                $cityAsset = CityAsset::create([
+                    'city_id' => $this->cityId,
+                    'asset_id' => $this->chosenTechnologyId,
+                    'xp' => $progress,
+                ]);
+
+                $cityAsset->load('asset');
+
+                Session::push('messages', 'Engineers researched ' . $progress . ' of ' . $cityAsset->asset->name . '.');
+            }
+        } else {
+            Session::push('messages', 'Engineers didn\'t research anything.');
         }
     }
 

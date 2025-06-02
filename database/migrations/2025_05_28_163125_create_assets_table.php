@@ -41,10 +41,24 @@ return new class extends Migration
             ],
             [
                 'id' => 4,
-                'name' => 'Soil samples',
+                'name' => 'Power generator',
                 'type' => AssetType::Technology->value,
-                'xp' => 150,
+                'xp' => 350,
                 'parent_id' => null,
+            ],
+            [
+                'id' => 5,
+                'name' => 'Antena',
+                'type' => AssetType::Technology->value,
+                'xp' => 50,
+                'parent_id' => 4,
+            ],
+            [
+                'id' => 6,
+                'name' => 'Telescope',
+                'type' => AssetType::Technology->value,
+                'xp' => 80,
+                'parent_id' => 4,
             ],
         ]);
     }

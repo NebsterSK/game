@@ -38,7 +38,7 @@
                 >
                     <option value="0">Nothing</option>
                     @foreach($this->buildings as $building)
-                        <option wire:key="{{ $building->id }}" value="{{ $building->id }}">{{ $building->name }} | Progress: {{ $building->cityAsset->xp ?? 0 }} / {{ $building->xp }}</option>
+                        <option wire:key="{{ $building->id }}" value="{{ $building->id }}">{{ $building->name }} | {{ $building->cityAsset->xp ?? 0 }} / {{ $building->xp }}</option>
                     @endforeach
                 </select>
             </div>
@@ -70,7 +70,7 @@
                     >
                         <option value="0">Nothing</option>
                         @foreach($this->technologies as $technology)
-                            <option wire:key="{{ $technology->id }}" value="{{ $technology->id }}">{{ $technology->name }} | Progress: {{ $technology->cityAsset->xp ?? 0 }} / {{ $technology->xp }}</option>
+                            <option wire:key="{{ $technology->id }}" value="{{ $technology->id }}">{{ $technology->name }} | {{ $technology->cityAsset->xp ?? 0 }} / {{ $technology->xp }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -87,21 +87,6 @@
             @endif
         </div>
     </div>
-
-{{--    <p>--}}
-{{--        Engineers--}}
-
-{{--        <button wire:click="decrement('{{ PopulationType::Engineer->value }}')" class="btn btn-secondary">-</button>--}}
-{{--        <input value="{{ $this->engineers }}" type="number" min="0" disabled />--}}
-{{--        <button wire:click="increment('{{ PopulationType::Engineer->value }}')" class="btn btn-secondary">+</button>--}}
-
-{{--        <select>--}}
-{{--            <option value="">Solar panels</option>--}}
-{{--            <option value="">Antena</option>--}}
-{{--            <option value="">Telescope</option>--}}
-{{--            <option value="">Rover</option>--}}
-{{--        </select>--}}
-{{--    </p>--}}
 
 {{--    <p>--}}
 {{--        Scientists--}}
