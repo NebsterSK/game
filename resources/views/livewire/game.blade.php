@@ -75,6 +75,39 @@
                     </select>
                 </div>
             @endif
+
+            @if($this->laboratoryIsBuilt)
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Scientists</span>
+
+                    <button
+                            wire:click="decrement('{{ PopulationType::Scientist->value }}')"
+                            wire:loading.attr="disabled"
+                            class="btn btn-outline-secondary"
+                    >-</button>
+
+                    <span class="input-group-text">{{ $this->scientists }}</span>
+
+                    <button
+                            wire:click="increment('{{ PopulationType::Scientist->value }}')"
+                            wire:loading.attr="disabled"
+                            class="btn btn-outline-secondary"
+                    >+</button>
+
+                    <label class="input-group-text">work on</label>
+
+                    <select
+                            wire:model="chosenResearchId"
+                            wire:loading.attr="disabled"
+                            class="form-select"
+                    >
+                        <option value="0">Nothing</option>
+                        @foreach($this->researches as $research)
+                            <option wire:key="{{ $research->id }}" value="{{ $research->id }}">{{ $research->name }} | {{ $research->cityAsset->xp ?? 0 }} / {{ $research->xp }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            @endif
         </div>
 
         <div class="col-6">
@@ -87,19 +120,6 @@
             @endif
         </div>
     </div>
-
-{{--    <p>--}}
-{{--        Scientists--}}
-
-{{--        <button wire:click="decrement('{{ PopulationType::Scientist->value }}')" class="btn btn-secondary">-</button>--}}
-{{--        <input value="{{ $this->scientists }}" type="number" min="0" disabled />--}}
-{{--        <button wire:click="increment('{{ PopulationType::Scientist->value }}')" class="btn btn-secondary">+</button>--}}
-
-{{--        <select>--}}
-{{--            <option value="">Soil samples</option>--}}
-{{--            <option value="">Atmosphere composition</option>--}}
-{{--        </select>--}}
-{{--    </p>--}}
 
     <hr>
 

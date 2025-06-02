@@ -18,6 +18,7 @@ return new class extends Migration
         });
 
         DB::table('assets')->insert([
+            // Buildings
             [
                 'id' => 1,
                 'name' => 'Housing',
@@ -40,6 +41,36 @@ return new class extends Migration
                 'parent_id' => 1,
             ],
             [
+                'id' => 10,
+                'name' => 'Solar panels',
+                'type' => AssetType::Building->value,
+                'xp' => 50,
+                'parent_id' => 1,
+            ],
+            [
+                'id' => 11,
+                'name' => 'Headquarters',
+                'type' => AssetType::Building->value,
+                'xp' => 300,
+                'parent_id' => 10,
+            ],
+            [
+                'id' => 12,
+                'name' => 'Infirmary',
+                'type' => AssetType::Building->value,
+                'xp' => 200,
+                'parent_id' => 10,
+            ],
+            [
+                'id' => 13,
+                'name' => 'Warehouse',
+                'type' => AssetType::Building->value,
+                'xp' => 150,
+                'parent_id' => 10,
+            ],
+
+            // Technology
+            [
                 'id' => 4,
                 'name' => 'Power generator',
                 'type' => AssetType::Technology->value,
@@ -57,8 +88,31 @@ return new class extends Migration
                 'id' => 6,
                 'name' => 'Telescope',
                 'type' => AssetType::Technology->value,
-                'xp' => 80,
+                'xp' => 150,
                 'parent_id' => 4,
+            ],
+
+            // Researches
+            [
+                'id' => 7,
+                'name' => 'Analyze soil samples',
+                'type' => AssetType::Research->value,
+                'xp' => 100,
+                'parent_id' => 3,
+            ],
+            [
+                'id' => 8,
+                'name' => 'Analyze atmosphere composition',
+                'type' => AssetType::Research->value,
+                'xp' => 100,
+                'parent_id' => 3,
+            ],
+            [
+                'id' => 9,
+                'name' => 'Psychological adaptation',
+                'type' => AssetType::Research->value,
+                'xp' => 100,
+                'parent_id' => 3,
             ],
         ]);
     }
