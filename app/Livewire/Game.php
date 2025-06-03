@@ -46,68 +46,6 @@ class Game extends Component
         $this->scientists = $this->city->scientists;
     }
 
-    public function increment(string $type): void
-    {
-        if ($this->population === 0) {
-            return;
-        }
-
-        switch ($type) {
-            case PopulationType::Builder->value:
-                $this->population--;
-                $this->builders++;
-
-                break;
-
-            case PopulationType::Engineer->value:
-                $this->population--;
-                $this->engineers++;
-
-                break;
-
-            case PopulationType::Scientist->value:
-                $this->population--;
-                $this->scientists++;
-
-                break;
-        }
-    }
-
-    public function decrement(string $type): void
-    {
-        switch ($type) {
-            case PopulationType::Builder->value:
-                if ($this->builders === 0) {
-                    return;
-                }
-
-                $this->population++;
-                $this->builders--;
-
-                break;
-
-            case PopulationType::Engineer->value:
-                if ($this->engineers === 0) {
-                    return;
-                }
-
-                $this->population++;
-                $this->engineers--;
-
-                break;
-
-            case PopulationType::Scientist->value:
-                if ($this->scientists === 0) {
-                    return;
-                }
-
-                $this->population++;
-                $this->scientists--;
-
-                break;
-        }
-    }
-
     public function endTurn(): void
     {
         Session::remove('messages');

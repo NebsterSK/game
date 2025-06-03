@@ -9,32 +9,35 @@
     <hr>
 
     <div class="row">
-        <div class="col-6">
-            <p>Available population: {{ $this->population }}</p>
+        <div
+            class="col-6"
+        >
+            <p>Available population: <span x-text="$wire.population"></span></p>
 
             <div class="input-group mb-3">
                 <span class="input-group-text">Builders</span>
 
                 <button
-                        wire:click="decrement('{{ PopulationType::Builder->value }}')"
-                        wire:loading.attr="disabled"
-                        class="btn btn-outline-secondary"
+                    x-on:click="if ($wire.builders > 0) {$wire.builders--;$wire.population++}"
+                    class="btn btn-outline-secondary"
                 >-</button>
 
-                <span class="input-group-text">{{ $this->builders }}</span>
+                <span
+                    x-text="$wire.builders"
+                    class="input-group-text"
+                ></span>
 
                 <button
-                        wire:click="increment('{{ PopulationType::Builder->value }}')"
-                        wire:loading.attr="disabled"
-                        class="btn btn-outline-secondary"
+                    x-on:click="if ($wire.population > 0) {$wire.builders++;$wire.population--}"
+                    class="btn btn-outline-secondary"
                 >+</button>
 
                 <label class="input-group-text">work on</label>
 
                 <select
-                        wire:model="chosenBuildingId"
-                        wire:loading.attr="disabled"
-                        class="form-select"
+                    wire:model="chosenBuildingId"
+                    wire:loading.attr="disabled"
+                    class="form-select"
                 >
                     <option value="0">Nothing</option>
                     @foreach($this->buildings as $building)
@@ -48,25 +51,26 @@
                     <span class="input-group-text">Engineers</span>
 
                     <button
-                            wire:click="decrement('{{ PopulationType::Engineer->value }}')"
-                            wire:loading.attr="disabled"
-                            class="btn btn-outline-secondary"
+                        x-on:click="if ($wire.engineers > 0) {$wire.engineers--;$wire.population++}"
+                        class="btn btn-outline-secondary"
                     >-</button>
 
-                    <span class="input-group-text">{{ $this->engineers }}</span>
+                    <span
+                        x-text="$wire.engineers"
+                        class="input-group-text"
+                    ></span>
 
                     <button
-                            wire:click="increment('{{ PopulationType::Engineer->value }}')"
-                            wire:loading.attr="disabled"
-                            class="btn btn-outline-secondary"
+                        x-on:click="if ($wire.population > 0) {$wire.engineers++;$wire.population--}"
+                        class="btn btn-outline-secondary"
                     >+</button>
 
                     <label class="input-group-text">work on</label>
 
                     <select
-                            wire:model="chosenTechnologyId"
-                            wire:loading.attr="disabled"
-                            class="form-select"
+                        wire:model="chosenTechnologyId"
+                        wire:loading.attr="disabled"
+                        class="form-select"
                     >
                         <option value="0">Nothing</option>
                         @foreach($this->technologies as $technology)
@@ -81,25 +85,26 @@
                     <span class="input-group-text">Scientists</span>
 
                     <button
-                            wire:click="decrement('{{ PopulationType::Scientist->value }}')"
-                            wire:loading.attr="disabled"
-                            class="btn btn-outline-secondary"
+                        x-on:click="if ($wire.scientists > 0) {$wire.scientists--;$wire.population++}"
+                        class="btn btn-outline-secondary"
                     >-</button>
 
-                    <span class="input-group-text">{{ $this->scientists }}</span>
+                    <span
+                        x-text="$wire.scientists"
+                        class="input-group-text"
+                    ></span>
 
                     <button
-                            wire:click="increment('{{ PopulationType::Scientist->value }}')"
-                            wire:loading.attr="disabled"
-                            class="btn btn-outline-secondary"
+                        x-on:click="if ($wire.population > 0) {$wire.scientists++;$wire.population--}"
+                        class="btn btn-outline-secondary"
                     >+</button>
 
                     <label class="input-group-text">work on</label>
 
                     <select
-                            wire:model="chosenResearchId"
-                            wire:loading.attr="disabled"
-                            class="form-select"
+                        wire:model="chosenResearchId"
+                        wire:loading.attr="disabled"
+                        class="form-select"
                     >
                         <option value="0">Nothing</option>
                         @foreach($this->researches as $research)

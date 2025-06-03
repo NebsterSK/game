@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $city = City::factory()->create([
-            'name' => 'Star city',
+            'name' => 'Nove Mesto',
             'user_id' => $user->id,
         ]);
     }
