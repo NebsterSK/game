@@ -12,7 +12,7 @@ return new class extends Migration
         Schema::create('assets', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable(false);
-            $table->enum('type', ['building', 'technology', 'research'])->nullable(false);
+            $table->enum('type', [AssetType::Building->value, AssetType::Technology->value, AssetType::Research->value])->nullable(false);
             $table->unsignedInteger('xp')->nullable(false)->default(100);
             $table->unsignedBigInteger('parent_id')->nullable();
         });
@@ -38,14 +38,14 @@ return new class extends Migration
                 'name' => 'Laboratory',
                 'type' => AssetType::Building->value,
                 'xp' => 250,
-                'parent_id' => 1,
+                'parent_id' => 12,
             ],
             [
                 'id' => 10,
                 'name' => 'Solar panels',
                 'type' => AssetType::Building->value,
                 'xp' => 50,
-                'parent_id' => 1,
+                'parent_id' => null,
             ],
             [
                 'id' => 11,
@@ -59,37 +59,44 @@ return new class extends Migration
                 'name' => 'Infirmary',
                 'type' => AssetType::Building->value,
                 'xp' => 200,
-                'parent_id' => 10,
+                'parent_id' => 1,
             ],
             [
                 'id' => 13,
                 'name' => 'Warehouse',
                 'type' => AssetType::Building->value,
                 'xp' => 150,
-                'parent_id' => 10,
+                'parent_id' => 2,
             ],
 
-            // Technology
+            // Technologies
             [
                 'id' => 4,
                 'name' => 'Power generator',
                 'type' => AssetType::Technology->value,
                 'xp' => 350,
-                'parent_id' => null,
+                'parent_id' => 11,
             ],
             [
                 'id' => 5,
                 'name' => 'Antena',
                 'type' => AssetType::Technology->value,
                 'xp' => 50,
-                'parent_id' => 4,
+                'parent_id' => 2,
             ],
             [
                 'id' => 6,
                 'name' => 'Telescope',
                 'type' => AssetType::Technology->value,
                 'xp' => 150,
-                'parent_id' => 4,
+                'parent_id' => 2,
+            ],
+            [
+                'id' => 15,
+                'name' => 'Rover',
+                'type' => AssetType::Technology->value,
+                'xp' => 100,
+                'parent_id' => 13,
             ],
 
             // Researches
@@ -113,6 +120,13 @@ return new class extends Migration
                 'type' => AssetType::Research->value,
                 'xp' => 100,
                 'parent_id' => 3,
+            ],
+            [
+                'id' => 14,
+                'name' => 'Wake crew from hibernation',
+                'type' => AssetType::Research->value,
+                'xp' => 200,
+                'parent_id' => 9,
             ],
         ]);
     }

@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Enums\AssetType;
 use App\Enums\PopulationType;
+use App\Livewire\Traits\ComputedProperties;
 use App\Models\Asset;
 use App\Models\City;
 use App\Models\CityAsset;
@@ -16,9 +17,16 @@ use Livewire\Component;
 
 /**
  * @property City $city
+ * @property Collection $buildings
+ * @property Collection $technologies
+ * @property Collection $researches
+ * @property Collection $workshopIsBuilt
+ * @property Collection $laboratoryIsBuilt
  */
 class Game extends Component
 {
+    use ComputedProperties;
+
     public string $cityId;
 
     public int $population;
@@ -36,87 +44,6 @@ class Game extends Component
         $this->builders = $this->city->builders;
         $this->engineers = $this->city->engineers;
         $this->scientists = $this->city->scientists;
-    }
-
-    #[Computed]
-    public function city(): City
-    {
-        return City::find($this->cityId);
-    }
-
-    #[Computed]
-    public function buildings(): Collection
-    {
-        $finishedBuildings = Asset::whereRelation('cityAsset', 'city_id', '=', $this->cityId)
-            ->whereRelation('cityAsset', 'city_asset.xp', '=', DB::raw('assets.xp'))
-            ->get('id')
-            ->pluck('id');
-
-        return Asset::with('cityAsset')
-
-            ->where('type', AssetType::Building->value)
-            ->whereNotIn('id', $finishedBuildings)
-            ->where(function (Builder $q) use ($finishedBuildings) {
-                $q->whereIn('parent_id', $finishedBuildings)
-                    ->orWhereNull('parent_id');
-            })
-            ->get();
-    }
-
-    #[Computed]
-    public function technologies(): Collection
-    {
-        $finishedTechnologies = Asset::whereRelation('cityAsset', 'city_id', '=', $this->cityId)
-            ->whereRelation('cityAsset', 'city_asset.xp', '=', DB::raw('assets.xp'))
-            ->get('id')
-            ->pluck('id');
-
-        return Asset::with('cityAsset')
-
-            ->where('type', AssetType::Technology->value)
-            ->whereNotIn('id', $finishedTechnologies)
-            ->where(function (Builder $q) use ($finishedTechnologies) {
-                $q->whereIn('parent_id', $finishedTechnologies)
-                    ->orWhereNull('parent_id');
-            })
-            ->get();
-    }
-
-    #[Computed]
-    public function researches(): Collection
-    {
-        $finishedResearches = Asset::whereRelation('cityAsset', 'city_id', '=', $this->cityId)
-            ->whereRelation('cityAsset', 'city_asset.xp', '=', DB::raw('assets.xp'))
-            ->get('id')
-            ->pluck('id');
-
-        return Asset::with('cityAsset')
-
-            ->where('type', AssetType::Research->value)
-            ->whereNotIn('id', $finishedResearches)
-            ->where(function (Builder $q) use ($finishedResearches) {
-                $q->whereIn('parent_id', $finishedResearches)
-                    ->orWhereNull('parent_id');
-            })
-            ->get();
-    }
-
-    #[Computed]
-    public function workshopIsBuilt(): bool
-    {
-        return Asset::where('id', 2)
-            ->whereRelation('cityAsset', 'city_id', '=', $this->cityId)
-            ->whereRelation('cityAsset', 'city_asset.xp', '=', DB::raw('assets.xp'))
-            ->exists();
-    }
-
-    #[Computed]
-    public function laboratoryIsBuilt(): bool
-    {
-        return Asset::where('id', 3)
-            ->whereRelation('cityAsset', 'city_id', '=', $this->cityId)
-            ->whereRelation('cityAsset', 'city_asset.xp', '=', DB::raw('assets.xp'))
-            ->exists();
     }
 
     public function increment(string $type): void
@@ -206,9 +133,12 @@ class Game extends Component
             ])->with('asset')->first();
             $newProgress = ($buildingInProgress->xp ?? 0) + $progress;
 
+            // TODO: Fix ked je dokoncene na jeden tah
             if ($buildingInProgress) {
                 if ($newProgress >= $buildingInProgress->asset->xp) {
                     $xp = $buildingInProgress->asset->xp;
+
+                    $this->chosenBuildingId = 0;
 
                     Session::push('messages', 'Builders finished building ' . $buildingInProgress->asset->name . '.');
                 } else {
@@ -231,8 +161,6 @@ class Game extends Component
 
                 Session::push('messages', 'Builders built ' . $progress . ' of ' . $cityAsset->asset->name . '.');
             }
-        } else {
-            Session::push('messages', 'Builders didn\'t build anything.');
         }
 
         // Technology
@@ -245,9 +173,12 @@ class Game extends Component
                 ])->with('asset')->first();
                 $newProgress = ($technologyInProgress->xp ?? 0) + $progress;
 
+                // TODO: Fix ked je dokoncene na jeden tah
                 if ($technologyInProgress) {
                     if ($newProgress >= $technologyInProgress->asset->xp) {
                         $xp = $technologyInProgress->asset->xp;
+
+                        $this->chosenTechnologyId = 0;
 
                         Session::push('messages', 'Engineers finished researching ' . $technologyInProgress->asset->name . '.');
                     } else {
@@ -270,8 +201,6 @@ class Game extends Component
 
                     Session::push('messages', 'Engineers researched ' . $progress . ' of ' . $cityAsset->asset->name . '.');
                 }
-            } else {
-                Session::push('messages', 'Engineers didn\'t research anything.');
             }
         }
 
@@ -285,9 +214,12 @@ class Game extends Component
                 ])->with('asset')->first();
                 $newProgress = ($researchInProgress->xp ?? 0) + $progress;
 
+                // TODO: Fix ked je dokoncene na jeden tah
                 if ($researchInProgress) {
                     if ($newProgress >= $researchInProgress->asset->xp) {
                         $xp = $researchInProgress->asset->xp;
+
+                        $this->chosenResearchId = 0;
 
                         Session::push('messages', 'Scientists finished researching ' . $researchInProgress->asset->name . '.');
                     } else {
@@ -310,8 +242,6 @@ class Game extends Component
 
                     Session::push('messages', 'Scientists researched ' . $progress . ' of ' . $cityAsset->asset->name . '.');
                 }
-            } else {
-                Session::push('messages', 'Scientists didn\'t research anything.');
             }
         }
     }
