@@ -1,10 +1,9 @@
-@use(App\Enums\PopulationType)
 @use(Illuminate\Support\Carbon)
 
 <div>
     <h1>{{ $this->city->name }}</h1>
 
-    <p>Turn: {{ $this->city->turn }} | Earth date: {{ Carbon::make('2028-02-18')->addDays($this->city->turn * 10)->toDateString() }}</p>
+    <p>Turn: {{ $this->city->turn }} | Earth date: {{ Carbon::make(config('game.starting_earth_date'))->addDays($this->city->turn * 10)->toDateString() }}</p>
 
     <hr>
 
@@ -19,7 +18,7 @@
 
                 <button
                     x-on:click="if ($wire.builders > 0) {$wire.builders--;$wire.population++}"
-                    class="btn btn-outline-secondary"
+                    class="btn btn-outline-primary"
                 >-</button>
 
                 <span
@@ -29,10 +28,10 @@
 
                 <button
                     x-on:click="if ($wire.population > 0) {$wire.builders++;$wire.population--}"
-                    class="btn btn-outline-secondary"
+                    class="btn btn-outline-primary"
                 >+</button>
 
-                <label class="input-group-text">work on</label>
+                <label class="input-group-text">build</label>
 
                 <select
                     wire:model="chosenBuildingId"
@@ -41,7 +40,7 @@
                 >
                     <option value="0">Nothing</option>
                     @foreach($this->buildings as $building)
-                        <option wire:key="{{ $building->id }}" value="{{ $building->id }}">{{ $building->name }} | {{ $building->cityAsset->xp ?? 0 }} / {{ $building->xp }}</option>
+                        <option wire:key="{{ $building->id }}" value="{{ $building->id }}">{{ $building->name }} | Progress: {{ $building->cityAsset->xp ?? 0 }} / {{ $building->xp }}</option>
                     @endforeach
                 </select>
             </div>
@@ -52,7 +51,7 @@
 
                     <button
                         x-on:click="if ($wire.engineers > 0) {$wire.engineers--;$wire.population++}"
-                        class="btn btn-outline-secondary"
+                        class="btn btn-outline-primary"
                     >-</button>
 
                     <span
@@ -62,10 +61,10 @@
 
                     <button
                         x-on:click="if ($wire.population > 0) {$wire.engineers++;$wire.population--}"
-                        class="btn btn-outline-secondary"
+                        class="btn btn-outline-primary"
                     >+</button>
 
-                    <label class="input-group-text">work on</label>
+                    <label class="input-group-text">develop</label>
 
                     <select
                         wire:model="chosenTechnologyId"
@@ -74,7 +73,7 @@
                     >
                         <option value="0">Nothing</option>
                         @foreach($this->technologies as $technology)
-                            <option wire:key="{{ $technology->id }}" value="{{ $technology->id }}">{{ $technology->name }} | {{ $technology->cityAsset->xp ?? 0 }} / {{ $technology->xp }}</option>
+                            <option wire:key="{{ $technology->id }}" value="{{ $technology->id }}">{{ $technology->name }} | Progress: {{ $technology->cityAsset->xp ?? 0 }} / {{ $technology->xp }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -86,7 +85,7 @@
 
                     <button
                         x-on:click="if ($wire.scientists > 0) {$wire.scientists--;$wire.population++}"
-                        class="btn btn-outline-secondary"
+                        class="btn btn-outline-primary"
                     >-</button>
 
                     <span
@@ -96,10 +95,10 @@
 
                     <button
                         x-on:click="if ($wire.population > 0) {$wire.scientists++;$wire.population--}"
-                        class="btn btn-outline-secondary"
+                        class="btn btn-outline-primary"
                     >+</button>
 
-                    <label class="input-group-text">work on</label>
+                    <label class="input-group-text">research</label>
 
                     <select
                         wire:model="chosenResearchId"
@@ -108,7 +107,7 @@
                     >
                         <option value="0">Nothing</option>
                         @foreach($this->researches as $research)
-                            <option wire:key="{{ $research->id }}" value="{{ $research->id }}">{{ $research->name }} | {{ $research->cityAsset->xp ?? 0 }} / {{ $research->xp }}</option>
+                            <option wire:key="{{ $research->id }}" value="{{ $research->id }}">{{ $research->name }} | Progress: {{ $research->cityAsset->xp ?? 0 }} / {{ $research->xp }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -116,9 +115,9 @@
         </div>
 
         <div class="col-6">
-            @if(\Illuminate\Support\Facades\Session::has('messages'))
+            @if(Session::has('messages'))
                 <ul>
-                    @foreach(\Illuminate\Support\Facades\Session::get('messages') as $message)
+                    @foreach(Session::get('messages') as $message)
                         <li>{{ $message }}</li>
                     @endforeach
                 </ul>

@@ -15,14 +15,6 @@ use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
-/**
- * @property City $city
- * @property Collection $buildings
- * @property Collection $technologies
- * @property Collection $researches
- * @property Collection $workshopIsBuilt
- * @property Collection $laboratoryIsBuilt
- */
 class Game extends Component
 {
     use ComputedProperties;
@@ -64,122 +56,110 @@ class Game extends Component
 
         // Building
         if ($this->chosenBuildingId !== 0) {
-            $progress = $this->builders * 10;
+            $xp = $this->builders * config('game.base_work_per_turn');
+
+            $asset = Asset::find($this->chosenBuildingId);
             $buildingInProgress = CityAsset::where([
                 'city_id' => $this->cityId,
                 'asset_id' => $this->chosenBuildingId,
-            ])->with('asset')->first();
-            $newProgress = ($buildingInProgress->xp ?? 0) + $progress;
+            ])->first();
 
-            // TODO: Fix ked je dokoncene na jeden tah
-            if ($buildingInProgress) {
-                if ($newProgress >= $buildingInProgress->asset->xp) {
-                    $xp = $buildingInProgress->asset->xp;
+            $newProgress = ($buildingInProgress->xp ?? 0) + $xp;
 
-                    $this->chosenBuildingId = 0;
+            // Finish
+            if ($newProgress >= $asset->xp) {
+                $newProgress = $asset->xp;
 
-                    Session::push('messages', 'Builders finished building ' . $buildingInProgress->asset->name . '.');
-                } else {
-                    $xp = $newProgress;
+                $xp = $asset->xp - ($buildingInProgress->xp ?? 0);
 
-                    Session::push('messages', 'Builders built ' . $progress . ' of ' . $buildingInProgress->asset->name . '.');
-                }
-
-                $buildingInProgress->update([
-                    'xp' => $xp,
-                ]);
-            } else {
-                $cityAsset = CityAsset::create([
-                    'city_id' => $this->cityId,
-                    'asset_id' => $this->chosenBuildingId,
-                    'xp' => $progress,
-                ]);
-
-                $cityAsset->load('asset');
-
-                Session::push('messages', 'Builders built ' . $progress . ' of ' . $cityAsset->asset->name . '.');
+                $this->chosenBuildingId = 0;
             }
+
+            CityAsset::upsert([
+                'xp' => $newProgress,
+                'city_id' => $this->cityId,
+                'asset_id' => $asset->id,
+            ], [
+                'city_id',
+                'asset_id',
+            ], [
+                'xp',
+            ]);
+
+            Session::push('messages', "Builders built $xp of $asset->name.");
         }
 
         // Technology
         if ($this->workshopIsBuilt) {
             if ($this->chosenTechnologyId !== 0) {
-                $progress = $this->engineers * 10;
+                $xp = $this->engineers * config('game.base_work_per_turn');
+
+                $asset = Asset::find($this->chosenTechnologyId);
                 $technologyInProgress = CityAsset::where([
                     'city_id' => $this->cityId,
                     'asset_id' => $this->chosenTechnologyId,
-                ])->with('asset')->first();
-                $newProgress = ($technologyInProgress->xp ?? 0) + $progress;
+                ])->first();
 
-                // TODO: Fix ked je dokoncene na jeden tah
-                if ($technologyInProgress) {
-                    if ($newProgress >= $technologyInProgress->asset->xp) {
-                        $xp = $technologyInProgress->asset->xp;
+                $newProgress = ($technologyInProgress->xp ?? 0) + $xp;
 
-                        $this->chosenTechnologyId = 0;
+                // Finish
+                if ($newProgress >= $asset->xp) {
+                    $newProgress = $asset->xp;
 
-                        Session::push('messages', 'Engineers finished researching ' . $technologyInProgress->asset->name . '.');
-                    } else {
-                        $xp = $newProgress;
+                    $xp = $asset->xp - ($technologyInProgress->xp ?? 0);
 
-                        Session::push('messages', 'Engineers researched ' . $progress . ' of ' . $technologyInProgress->asset->name . '.');
-                    }
-
-                    $technologyInProgress->update([
-                        'xp' => $xp,
-                    ]);
-                } else {
-                    $cityAsset = CityAsset::create([
-                        'city_id' => $this->cityId,
-                        'asset_id' => $this->chosenTechnologyId,
-                        'xp' => $progress,
-                    ]);
-
-                    $cityAsset->load('asset');
-
-                    Session::push('messages', 'Engineers researched ' . $progress . ' of ' . $cityAsset->asset->name . '.');
+                    $this->chosenTechnologyId = 0;
                 }
+
+                CityAsset::upsert([
+                    'xp' => $newProgress,
+                    'city_id' => $this->cityId,
+                    'asset_id' => $asset->id,
+                ], [
+                    'city_id',
+                    'asset_id',
+                ], [
+                    'xp',
+                ]);
+
+                Session::push('messages', "Engineers developed $xp of $asset->name.");
             }
         }
 
         // Research
         if ($this->laboratoryIsBuilt) {
             if ($this->chosenResearchId !== 0) {
-                $progress = $this->scientists * 10;
+                $xp = $this->scientists * config('game.base_work_per_turn');
+
+                $asset = Asset::find($this->chosenResearchId);
                 $researchInProgress = CityAsset::where([
                     'city_id' => $this->cityId,
                     'asset_id' => $this->chosenResearchId,
-                ])->with('asset')->first();
-                $newProgress = ($researchInProgress->xp ?? 0) + $progress;
+                ])->first();
 
-                // TODO: Fix ked je dokoncene na jeden tah
-                if ($researchInProgress) {
-                    if ($newProgress >= $researchInProgress->asset->xp) {
-                        $xp = $researchInProgress->asset->xp;
+                $newProgress = ($researchInProgress->xp ?? 0) + $xp;
 
-                        $this->chosenResearchId = 0;
+                // Finish
+                if ($newProgress >= $asset->xp) {
+                    $newProgress = $asset->xp;
 
-                        Session::push('messages', 'Scientists finished researching ' . $researchInProgress->asset->name . '.');
-                    } else {
-                        $xp = $newProgress;
+                    $xp = $asset->xp - ($researchInProgress->xp ?? 0);
 
-                        Session::push('messages', 'Scientists researched ' . $progress . ' of ' . $researchInProgress->asset->name . '.');
-                    }
-
-                    $researchInProgress->update([
-                        'xp' => $xp,
-                    ]);
-                } else {
-                    $cityAsset = CityAsset::create([
-                        'city_id' => $this->cityId,
-                        'asset_id' => $this->chosenResearchId,
-                        'xp' => $progress,
-                    ]);
-
-                    $cityAsset->load('asset');
-
-                    Session::push('messages', 'Scientists researched ' . $progress . ' of ' . $cityAsset->asset->name . '.');
+                    $this->chosenResearchId = 0;
                 }
+
+                CityAsset::upsert([
+                    'xp' => $newProgress,
+                    'city_id' => $this->cityId,
+                    'asset_id' => $asset->id,
+                ], [
+                    'city_id',
+                    'asset_id',
+                ], [
+                    'xp',
+                ]);
+
+                Session::push('messages', "Scientists researched $xp of $asset->name.");
             }
         }
     }

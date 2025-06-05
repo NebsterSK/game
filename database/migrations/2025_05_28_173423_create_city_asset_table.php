@@ -15,6 +15,7 @@ return new class extends Migration
             $table->unsignedInteger('xp')->default(0);
             $table->timestamps();
 
+            $table->unique(['city_id', 'asset_id']);
             $table->foreign('city_id')->references('id')->on('cities')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('asset_id')->references('id')->on('assets')->cascadeOnUpdate()->cascadeOnDelete();
         });

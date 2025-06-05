@@ -10,6 +10,14 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 
+/**
+ * @property City $city
+ * @property Collection $buildings
+ * @property Collection $technologies
+ * @property Collection $researches
+ * @property Collection $workshopIsBuilt
+ * @property Collection $laboratoryIsBuilt
+ */
 trait ComputedProperties
 {
     #[Computed]
@@ -34,6 +42,7 @@ trait ComputedProperties
                 $q->whereIn('parent_id', $finishedBuildings)
                     ->orWhereNull('parent_id');
             })
+            ->orderBy('name')
             ->get();
     }
 
@@ -53,6 +62,7 @@ trait ComputedProperties
                 $q->whereIn('parent_id', $finishedTechnologies)
                     ->orWhereNull('parent_id');
             })
+            ->orderBy('name')
             ->get();
     }
 
@@ -72,6 +82,7 @@ trait ComputedProperties
                 $q->whereIn('parent_id', $finishedResearches)
                     ->orWhereNull('parent_id');
             })
+            ->orderBy('name')
             ->get();
     }
 
