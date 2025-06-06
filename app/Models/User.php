@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
 
 /**
  * 
@@ -20,8 +19,8 @@ use Illuminate\Support\Str;
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\City> $cities
- * @property-read int|null $cities_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Colony> $colonies
+ * @property-read int|null $colonies_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
@@ -40,8 +39,8 @@ use Illuminate\Support\Str;
  */
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     protected $fillable = [
         'name',
@@ -60,8 +59,8 @@ class User extends Authenticatable
     ];
 
     // Relations
-    public function cities(): HasMany
+    public function colonies(): HasMany
     {
-        return $this->hasMany(City::class);
+        return $this->hasMany(Colony::class);
     }
 }

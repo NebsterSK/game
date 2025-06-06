@@ -4,7 +4,7 @@ namespace App\Livewire\Traits;
 
 use App\Enums\AssetType;
 use App\Models\Asset;
-use App\Models\CityAsset;
+use App\Models\ColonyAsset;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -24,13 +24,12 @@ trait Scientists
     #[Computed]
     public function researches(): Collection
     {
-        $finishedResearches = Asset::whereRelation('cityAsset', 'city_id', '=', $this->city->id)
-            ->whereRelation('cityAsset', 'city_asset.xp', '=', DB::raw('assets.xp'))
+        $finishedResearches = Asset::whereRelation('colonyAsset', 'colony_id', '=', $this->colony->id)
+            ->whereRelation('colonyAsset', 'colony_asset.xp', '=', DB::raw('assets.xp'))
             ->get('id')
             ->pluck('id');
 
-        return Asset::with('cityAsset')
-
+        return Asset::with('colonyAsset')
             ->where('type', AssetType::Research->value)
             ->whereNotIn('id', $finishedResearches)
             ->where(function (Builder $q) use ($finishedResearches) {
@@ -45,8 +44,8 @@ trait Scientists
     public function laboratoryIsBuilt(): bool
     {
         return Asset::where('id', 3)
-            ->whereRelation('cityAsset', 'city_id', '=', $this->city->id)
-            ->whereRelation('cityAsset', 'city_asset.xp', '=', DB::raw('assets.xp'))
+            ->whereRelation('colonyAsset', 'colony_id', '=', $this->colony->id)
+            ->whereRelation('colonyAsset', 'colony_asset.xp', '=', DB::raw('assets.xp'))
             ->exists();
     }
 
@@ -56,8 +55,8 @@ trait Scientists
             $xp = $this->scientists * config('game.base_work_per_turn');
 
             $asset = Asset::find($this->chosenResearchId);
-            $researchInProgress = CityAsset::where([
-                'city_id' => $this->city->id,
+            $researchInProgress = ColonyAsset::where([
+                'colony_id' => $this->colony->id,
                 'asset_id' => $this->chosenResearchId,
             ])->first();
 
@@ -72,12 +71,12 @@ trait Scientists
                 $this->chosenResearchId = 0;
             }
 
-            CityAsset::upsert([
+            ColonyAsset::upsert([
                 'xp' => $newProgress,
-                'city_id' => $this->city->id,
+                'colony_id' => $this->colony->id,
                 'asset_id' => $asset->id,
             ], [
-                'city_id',
+                'colony_id',
                 'asset_id',
             ], [
                 'xp',

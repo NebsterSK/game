@@ -1,9 +1,9 @@
 @use(Illuminate\Support\Carbon)
 
 <div>
-    <h1>{{ $this->city->name }}</h1>
+    <h1>{{ $this->colony->name }}</h1>
 
-    <p>Turn: {{ $this->city->turn }} | Earth date: {{ Carbon::make(config('game.starting_earth_date'))->addDays($this->city->turn * 10)->toDateString() }}</p>
+    <p>Turn: {{ $this->colony->turn }} | Earth date: {{ Carbon::make(config('game.starting_earth_date'))->addDays($this->colony->turn * 10)->toDateString() }}</p>
 
     <hr>
 
@@ -40,7 +40,7 @@
                 >
                     <option value="0">Nothing</option>
                     @foreach($this->buildings as $building)
-                        <option wire:key="{{ $building->id }}" value="{{ $building->id }}">{{ $building->name }} | Progress: {{ $building->cityAsset->xp ?? 0 }} / {{ $building->xp }}</option>
+                        <option wire:key="{{ $building->id }}" value="{{ $building->id }}">{{ $building->name }} | Progress: {{ $building->colonyAsset->xp ?? 0 }} / {{ $building->xp }}</option>
                     @endforeach
                 </select>
             </div>
@@ -73,7 +73,7 @@
                     >
                         <option value="0">Nothing</option>
                         @foreach($this->technologies as $technology)
-                            <option wire:key="{{ $technology->id }}" value="{{ $technology->id }}">{{ $technology->name }} | Progress: {{ $technology->cityAsset->xp ?? 0 }} / {{ $technology->xp }}</option>
+                            <option wire:key="{{ $technology->id }}" value="{{ $technology->id }}">{{ $technology->name }} | Progress: {{ $technology->colonyAsset->xp ?? 0 }} / {{ $technology->xp }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -107,7 +107,7 @@
                     >
                         <option value="0">Nothing</option>
                         @foreach($this->researches as $research)
-                            <option wire:key="{{ $research->id }}" value="{{ $research->id }}">{{ $research->name }} | Progress: {{ $research->cityAsset->xp ?? 0 }} / {{ $research->xp }}</option>
+                            <option wire:key="{{ $research->id }}" value="{{ $research->id }}">{{ $research->name }} | Progress: {{ $research->colonyAsset->xp ?? 0 }} / {{ $research->xp }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -129,10 +129,10 @@
 
     <div class="d-flex justify-content-between">
         <button
-            wire:click="resetCity"
+            wire:click="resetColony"
             wire:confirm="Sure?"
             class="btn btn-danger"
-        >Reset city</button>
+        >Reset colony</button>
 
         <button
             wire:click="endTurn"

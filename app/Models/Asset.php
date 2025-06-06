@@ -14,9 +14,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $type
  * @property int $xp
  * @property int|null $parent_id
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CityAsset> $cities
- * @property-read int|null $cities_count
- * @property-read \App\Models\CityAsset|null $cityAsset
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ColonyAsset> $colonies
+ * @property-read int|null $colonies_count
+ * @property-read \App\Models\ColonyAsset|null $colonyAsset
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset query()
@@ -37,13 +37,13 @@ class Asset extends Model
     ];
 
     // Relations
-    public function cities(): BelongsToMany
+    public function colonies(): BelongsToMany
     {
-        return $this->belongsToMany(CityAsset::class, 'city_asset')->withPivot(['xp']);
+        return $this->belongsToMany(ColonyAsset::class, 'colony_asset')->withPivot(['xp']);
     }
 
-    public function cityAsset(): HasOne
+    public function colonyAsset(): HasOne
     {
-        return $this->hasOne(CityAsset::class);
+        return $this->hasOne(ColonyAsset::class);
     }
 }

@@ -2,6 +2,6 @@
 
 @section('content')
     <div class="container">
-        <livewire:game :city="$city"/>
+        <livewire:game :colony="$colony"/>
     </div>
 @endsection

@@ -4,7 +4,7 @@ namespace App\Livewire\Traits;
 
 use App\Enums\AssetType;
 use App\Models\Asset;
-use App\Models\CityAsset;
+use App\Models\ColonyAsset;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -23,13 +23,12 @@ trait Builders
     #[Computed]
     public function buildings(): Collection
     {
-        $finishedBuildings = Asset::whereRelation('cityAsset', 'city_id', '=', $this->city->id)
-            ->whereRelation('cityAsset', 'city_asset.xp', '=', DB::raw('assets.xp'))
+        $finishedBuildings = Asset::whereRelation('colonyAsset', 'colony_id', '=', $this->colony->id)
+            ->whereRelation('colonyAsset', 'colony_asset.xp', '=', DB::raw('assets.xp'))
             ->get('id')
             ->pluck('id');
 
-        return Asset::with('cityAsset')
-
+        return Asset::with('colonyAsset')
             ->where('type', AssetType::Building->value)
             ->whereNotIn('id', $finishedBuildings)
             ->where(function (Builder $q) use ($finishedBuildings) {
@@ -46,8 +45,8 @@ trait Builders
             $xp = $this->builders * config('game.base_work_per_turn');
 
             $asset = Asset::find($this->chosenBuildingId);
-            $buildingInProgress = CityAsset::where([
-                'city_id' => $this->city->id,
+            $buildingInProgress = ColonyAsset::where([
+                'colony_id' => $this->colony->id,
                 'asset_id' => $this->chosenBuildingId,
             ])->first();
 
@@ -62,12 +61,12 @@ trait Builders
                 $this->chosenBuildingId = 0;
             }
 
-            CityAsset::upsert([
+            ColonyAsset::upsert([
                 'xp' => $newProgress,
-                'city_id' => $this->city->id,
+                'colony_id' => $this->colony->id,
                 'asset_id' => $asset->id,
             ], [
-                'city_id',
+                'colony_id',
                 'asset_id',
             ], [
                 'xp',

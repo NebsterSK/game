@@ -28,7 +28,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('cities.index') }}">Cities</a>
+                                <a class="nav-link" href="{{ route('colonies.index') }}">Colonies</a>
                             </li>
                         @endauth
                     </ul>

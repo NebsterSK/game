@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('cities', function (Blueprint $table) {
+        Schema::create('colonies', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name', 20);
             $table->unsignedInteger('turn')->nullable(false)->default(0);
@@ -25,6 +25,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('cities');
+        Schema::dropIfExists('colonies');
     }
 };

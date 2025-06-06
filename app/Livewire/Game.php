@@ -5,7 +5,7 @@ namespace App\Livewire;
 use App\Livewire\Traits\Builders;
 use App\Livewire\Traits\Engineers;
 use App\Livewire\Traits\Scientists;
-use App\Models\City;
+use App\Models\Colony;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 
@@ -15,24 +15,24 @@ class Game extends Component
     use Engineers;
     use Scientists;
 
-    public City $city;
+    public Colony $colony;
 
     public int $population;
 
     public function mount(): void
     {
-        $this->population = $this->city->population;
-        $this->builders = $this->city->builders;
-        $this->engineers = $this->city->engineers;
-        $this->scientists = $this->city->scientists;
+        $this->population = $this->colony->population;
+        $this->builders = $this->colony->builders;
+        $this->engineers = $this->colony->engineers;
+        $this->scientists = $this->colony->scientists;
     }
 
     public function endTurn(): void
     {
         Session::remove('messages');
 
-        $this->city->update([
-            'turn' => $this->city->turn + 1,
+        $this->colony->update([
+            'turn' => $this->colony->turn + 1,
             'population' => $this->population,
             'builders' => $this->builders,
             'engineers' => $this->engineers,
@@ -54,11 +54,11 @@ class Game extends Component
         }
     }
 
-    public function resetCity(): void
+    public function resetColony(): void
     {
         Session::remove('messages');
 
-        $this->city->update([
+        $this->colony->update([
             'turn' => 0,
             'population' => 10,
             'builders' => 0,
@@ -66,7 +66,7 @@ class Game extends Component
             'scientists' => 0,
         ]);
 
-        $this->city->cityAssets()->delete();
+        $this->colony->colonyAssets()->delete();
 
         $this->mount();
     }

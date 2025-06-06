@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\City;
+use App\Models\Colony;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@example.com',
         ]);
 
-        $city = City::factory()->create([
+        $city = Colony::factory()->create([
             'name' => 'Nove Mesto',
             'user_id' => $user->id,
         ]);

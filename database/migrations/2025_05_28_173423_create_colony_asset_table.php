@@ -8,21 +8,21 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('city_asset', function (Blueprint $table) {
+        Schema::create('colony_asset', function (Blueprint $table) {
             $table->id();
-            $table->uuid('city_id');
+            $table->uuid('colony_id');
             $table->unsignedBigInteger('asset_id');
             $table->unsignedInteger('xp')->default(0);
             $table->timestamps();
 
-            $table->unique(['city_id', 'asset_id']);
-            $table->foreign('city_id')->references('id')->on('cities')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->unique(['colony_id', 'asset_id']);
+            $table->foreign('colony_id')->references('id')->on('colonies')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('asset_id')->references('id')->on('assets')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('city_asset');
+        Schema::dropIfExists('colony_asset');
     }
 };
