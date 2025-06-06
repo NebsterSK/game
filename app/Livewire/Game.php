@@ -12,7 +12,6 @@ use Livewire\Component;
 class Game extends Component
 {
     use Builders;
-//    use General;
     use Engineers;
     use Scientists;
 
