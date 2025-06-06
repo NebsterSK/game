@@ -5,7 +5,7 @@
     <p>dashboard</p>
 
     @foreach($cities as $city)
-        <a href="{{ route('city', ['city' => $city->id]) }}">{{ $city->name }}</a>
+        <a href="{{ route('cities.show', ['city' => $city->id]) }}">{{ $city->name }}</a>
     @endforeach
 </div>
 @endsection

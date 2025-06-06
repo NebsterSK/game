@@ -27,7 +27,7 @@ class PageController extends Controller
     {
         // TODO: Auth
 
-        return view('city')->with([
+        return view('cities/show')->with([
             'city' => $city,
         ]);
     }

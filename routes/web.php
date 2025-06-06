@@ -8,7 +8,7 @@ Route::get('/', [PageController::class, 'index'] )->name('index');
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
     // TODO: Profile
-    Route::get('/cities/{city}', [PageController::class, 'city'])->name('city');
+    Route::get('/cities/{city}', [PageController::class, 'city'])->name('cities.show');
 });
 
 Auth::routes();
