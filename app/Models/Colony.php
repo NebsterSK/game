@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -15,10 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $id
  * @property string $name
  * @property int $turn
- * @property int $population
- * @property int $builders
- * @property int $engineers
- * @property int $scientists
+ * @property \ArrayObject<array-key, mixed>|null $params
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -29,13 +26,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereBuilders($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereEngineers($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony wherePopulation($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereScientists($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereParams($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereTurn($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereUserId($value)
@@ -49,10 +43,11 @@ class Colony extends Model
 
     protected $fillable = [
         'turn',
-        'population',
-        'builders',
-        'engineers',
-        'scientists',
+        'params',
+    ];
+
+    protected $casts = [
+        'params' => AsArrayObject::class,
     ];
 
     // Relations

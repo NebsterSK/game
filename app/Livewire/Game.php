@@ -6,6 +6,7 @@ use App\Livewire\Traits\Builders;
 use App\Livewire\Traits\Engineers;
 use App\Livewire\Traits\Scientists;
 use App\Models\Colony;
+use Illuminate\Database\Eloquent\Casts\ArrayObject;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 
@@ -21,23 +22,22 @@ class Game extends Component
 
     public function mount(): void
     {
-        $this->population = $this->colony->population;
-        $this->builders = $this->colony->builders;
-        $this->engineers = $this->colony->engineers;
-        $this->scientists = $this->colony->scientists;
+        $this->population = $this->colony->params->population;
+        $this->builders = $this->colony->params->builders;
+        $this->engineers = $this->colony->params->engineers;
+        $this->scientists = $this->colony->params->scientists;
     }
 
     public function endTurn(): void
     {
         Session::remove('messages');
 
-        $this->colony->update([
-            'turn' => $this->colony->turn + 1,
-            'population' => $this->population,
-            'builders' => $this->builders,
-            'engineers' => $this->engineers,
-            'scientists' => $this->scientists,
-        ]);
+        $this->colony->turn = $this->colony->turn + 1;
+        $this->colony->params->population = $this->population;
+        $this->colony->params->builders = $this->builders;
+        $this->colony->params->engineers = $this->engineers;
+        $this->colony->params->scientists = $this->scientists;
+        $this->colony->save();
 
         if ($this->population > 0) {
             Session::push('messages', 'We have available population that is not assigned to any role.');
@@ -58,13 +58,12 @@ class Game extends Component
     {
         Session::remove('messages');
 
-        $this->colony->update([
-            'turn' => 0,
-            'population' => 10,
-            'builders' => 0,
-            'engineers' => 0,
-            'scientists' => 0,
-        ]);
+        $this->colony->turn = 0;
+        $this->colony->params->population = 10;
+        $this->colony->params->builders = 0;
+        $this->colony->params->engineers = 0;
+        $this->colony->params->scientists = 0;
+        $this->colony->save();
 
         $this->colony->colonyAssets()->delete();
 

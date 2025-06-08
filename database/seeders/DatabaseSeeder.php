@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@example.com',
         ]);
 
-        $city = Colony::factory()->create([
+        $colony = Colony::factory()->create([
             'name' => 'Nove Mesto',
             'user_id' => $user->id,
         ]);
