@@ -1,18 +1,26 @@
 @use(Illuminate\Support\Carbon)
 
 <div>
-    <h1>{{ $this->colony->name }}</h1>
+    <div class="row">
+        <div class="col-6">
+            <h1>{{ $this->colony->name }}</h1>
 
-    <p>Turn: {{ $this->colony->turn }} | Earth date: {{ Carbon::make(config('game.starting_earth_date'))->addDays($this->colony->turn * 10)->toDateString() }}</p>
+            <p>Turn: {{ $this->colony->turn }} | Earth date: {{ Carbon::make(config('game.starting_earth_date'))->addDays($this->colony->turn * 10)->toDateString() }}</p>
+        </div>
+
+        <div class="col-6">
+            <p>[buffs]</p>
+        </div>
+    </div>
+
+    <hr>
+
+    <p>Population: <span x-text="$wire.population"></span> | Power: {{ $this->power }} Oxygen: ? Water: ? Food: ? | Metals: ? Plastics: ? Fuel: ?</p>
 
     <hr>
 
     <div class="row">
-        <div
-            class="col-6"
-        >
-            <p>Available population: <span x-text="$wire.population"></span></p>
-
+        <div class="col-6">
             <div class="input-group mb-3">
                 <span class="input-group-text">Builders</span>
 
@@ -124,6 +132,10 @@
             @endif
         </div>
     </div>
+
+    <hr>
+
+    <p>[warehouse & hangar]</p>
 
     <hr>
 

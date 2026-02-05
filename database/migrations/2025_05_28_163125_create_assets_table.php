@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('name')->nullable(false);
             $table->enum('type', [AssetType::Building->value, AssetType::Technology->value, AssetType::Research->value])->nullable(false);
             $table->unsignedInteger('xp')->nullable(false)->default(100);
+            $table->json('on_complete')->nullable();
             $table->unsignedBigInteger('parent_id')->nullable();
         });
 
@@ -24,6 +25,7 @@ return new class extends Migration
                 'name' => 'Housing',
                 'type' => AssetType::Building->value,
                 'xp' => 100,
+                'on_complete' => null,
                 'parent_id' => null,
             ],
             [
@@ -31,6 +33,7 @@ return new class extends Migration
                 'name' => 'Workshop',
                 'type' => AssetType::Building->value,
                 'xp' => 200,
+                'on_complete' => null,
                 'parent_id' => 1,
             ],
             [
@@ -38,6 +41,7 @@ return new class extends Migration
                 'name' => 'Laboratory',
                 'type' => AssetType::Building->value,
                 'xp' => 250,
+                'on_complete' => null,
                 'parent_id' => 12,
             ],
             [
@@ -45,6 +49,13 @@ return new class extends Migration
                 'name' => 'Solar panels',
                 'type' => AssetType::Building->value,
                 'xp' => 50,
+                'on_complete' => json_encode([
+                    [
+                        'param' => 'power',
+                        'operator' => 'add',
+                        'value' => 5,
+                    ],
+                ]),
                 'parent_id' => null,
             ],
             [
@@ -52,6 +63,7 @@ return new class extends Migration
                 'name' => 'Headquarters',
                 'type' => AssetType::Building->value,
                 'xp' => 300,
+                'on_complete' => null,
                 'parent_id' => 10,
             ],
             [
@@ -59,6 +71,7 @@ return new class extends Migration
                 'name' => 'Infirmary',
                 'type' => AssetType::Building->value,
                 'xp' => 200,
+                'on_complete' => null,
                 'parent_id' => 1,
             ],
             [
@@ -66,6 +79,7 @@ return new class extends Migration
                 'name' => 'Warehouse',
                 'type' => AssetType::Building->value,
                 'xp' => 150,
+                'on_complete' => null,
                 'parent_id' => 2,
             ],
 
@@ -75,6 +89,7 @@ return new class extends Migration
                 'name' => 'Power generator',
                 'type' => AssetType::Technology->value,
                 'xp' => 350,
+                'on_complete' => null,
                 'parent_id' => 11,
             ],
             [
@@ -82,6 +97,7 @@ return new class extends Migration
                 'name' => 'Antena',
                 'type' => AssetType::Technology->value,
                 'xp' => 50,
+                'on_complete' => null,
                 'parent_id' => 2,
             ],
             [
@@ -89,6 +105,7 @@ return new class extends Migration
                 'name' => 'Telescope',
                 'type' => AssetType::Technology->value,
                 'xp' => 150,
+                'on_complete' => null,
                 'parent_id' => 2,
             ],
             [
@@ -96,6 +113,7 @@ return new class extends Migration
                 'name' => 'Rover',
                 'type' => AssetType::Technology->value,
                 'xp' => 100,
+                'on_complete' => null,
                 'parent_id' => 13,
             ],
 
@@ -105,6 +123,7 @@ return new class extends Migration
                 'name' => 'Analyze soil samples',
                 'type' => AssetType::Research->value,
                 'xp' => 100,
+                'on_complete' => null,
                 'parent_id' => 3,
             ],
             [
@@ -112,6 +131,7 @@ return new class extends Migration
                 'name' => 'Analyze atmosphere composition',
                 'type' => AssetType::Research->value,
                 'xp' => 100,
+                'on_complete' => null,
                 'parent_id' => 3,
             ],
             [
@@ -119,6 +139,7 @@ return new class extends Migration
                 'name' => 'Psychological adaptation',
                 'type' => AssetType::Research->value,
                 'xp' => 100,
+                'on_complete' => null,
                 'parent_id' => 3,
             ],
             [
@@ -126,6 +147,7 @@ return new class extends Migration
                 'name' => 'Wake crew from hibernation',
                 'type' => AssetType::Research->value,
                 'xp' => 200,
+                'on_complete' => null,
                 'parent_id' => 9,
             ],
         ]);

@@ -19,6 +19,7 @@ class ColonyFactory extends Factory
                 'builders' => 0,
                 'engineers' => 0,
                 'scientists' => 0,
+                'power' => 10,
             ],
             'user_id' => User::factory(),
         ];

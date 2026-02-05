@@ -19,6 +19,7 @@ class Game extends Component
     public Colony $colony;
 
     public int $population;
+    public int $power;
 
     public function mount(): void
     {
@@ -26,6 +27,8 @@ class Game extends Component
         $this->builders = $this->colony->params->builders;
         $this->engineers = $this->colony->params->engineers;
         $this->scientists = $this->colony->params->scientists;
+
+        $this->power = $this->colony->params->power;
     }
 
     public function endTurn(): void
@@ -37,6 +40,7 @@ class Game extends Component
         $this->colony->params->builders = $this->builders;
         $this->colony->params->engineers = $this->engineers;
         $this->colony->params->scientists = $this->scientists;
+        $this->colony->params->power = $this->power;
         $this->colony->save();
 
         if ($this->population > 0) {
@@ -63,6 +67,7 @@ class Game extends Component
         $this->colony->params->builders = 0;
         $this->colony->params->engineers = 0;
         $this->colony->params->scientists = 0;
+        $this->colony->params->power = 10;
         $this->colony->save();
 
         $this->colony->colonyAssets()->delete();

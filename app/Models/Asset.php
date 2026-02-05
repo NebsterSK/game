@@ -33,7 +33,12 @@ class Asset extends Model
         'name',
         'type',
         'xp',
+        'on_complete',
         'parent_id',
+    ];
+
+    protected $casts = [
+        'on_complete' => 'array',
     ];
 
     // Relations
