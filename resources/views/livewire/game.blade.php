@@ -3,14 +3,15 @@
 <div>
     <h1>{{ $this->colony->name }}</h1>
 
-    <p>Turn: {{ $this->colony->turn }} | Earth date: {{ Carbon::make(config('game.starting_earth_date'))->addDays($this->colony->turn * 10)->toDateString() }}</p>
+{{--    <p>Turn: {{ $this->colony->turn }} | Earth date: {{ Carbon::make(config('game.starting_earth_date'))->addDays($this->colony->turn * 10)->toDateString() }}</p>--}}
+    <p>Turn: {{ $this->colony->turn }}</p>
 
     <hr>
 
     <div class="row">
-        <div
-            class="col-6"
-        >
+        <div class="col-6">
+            <h2>Population</h2>
+
             <p>Available population: <span x-text="$wire.population"></span></p>
 
             <div class="input-group mb-3">
@@ -115,24 +116,31 @@
         </div>
 
         <div class="col-6">
-            @if(Session::has('messages'))
-                <ul>
-                    @foreach(Session::get('messages') as $message)
-                        <li>{{ $message }}</li>
-                    @endforeach
-                </ul>
-            @endif
+            <h2>Commander's log</h2>
+
+            <code>
+                @if(Session::has('messages'))
+                    <ul>
+                        @foreach(Session::get('messages') as $message)
+                            <li>{{ $message }}</li>
+                        @endforeach
+                    </ul>
+                @endif
+            </code>
         </div>
     </div>
 
     <hr>
 
     <div class="d-flex justify-content-between">
+        @if(config('app.debug'))
         <button
             wire:click="resetColony"
             wire:confirm="Sure?"
+            wire:loading.attr="disabled"
             class="btn btn-danger"
         >Reset colony</button>
+        @endif
 
         <button
             wire:click="endTurn"
