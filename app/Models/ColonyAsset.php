@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property int $id
  * @property string $colony_id
  * @property int $asset_id
