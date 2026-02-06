@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Events\TurnEnded;
 use App\Livewire\Traits\Builders;
 use App\Livewire\Traits\Engineers;
 use App\Livewire\Traits\Scientists;
@@ -29,29 +30,7 @@ class Game extends Component
 
     public function endTurn(): void
     {
-        Session::remove('messages');
-
-        $this->colony->update([
-            'turn' => $this->colony->turn + 1,
-            'population' => $this->population,
-            'builders' => $this->builders,
-            'engineers' => $this->engineers,
-            'scientists' => $this->scientists,
-        ]);
-
-        if ($this->population > 0) {
-            Session::push('messages', 'We have available population that is not assigned to any role.');
-        }
-
-        $this->progressBuilding();
-
-        if ($this->workshopIsBuilt) {
-            $this->progressTechnology();
-        }
-
-        if ($this->laboratoryIsBuilt) {
-            $this->progressResearch();
-        }
+        TurnEnded::dispatch($this);
     }
 
     public function resetColony(): void

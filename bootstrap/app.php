@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         //
     })
+    ->withEvents(discover: false) // Disable auto-discovery
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

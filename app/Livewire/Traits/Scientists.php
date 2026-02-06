@@ -4,11 +4,9 @@ namespace App\Livewire\Traits;
 
 use App\Enums\AssetType;
 use App\Models\Asset;
-use App\Models\ColonyAsset;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Computed;
 
 /**
@@ -47,42 +45,5 @@ trait Scientists
             ->whereRelation('colonyAsset', 'colony_id', '=', $this->colony->id)
             ->whereRelation('colonyAsset', 'colony_asset.xp', '=', DB::raw('assets.xp'))
             ->exists();
-    }
-
-    protected function progressResearch(): void
-    {
-        if ($this->chosenResearchId !== 0) {
-            $xp = $this->scientists * config('game.base_work_per_turn');
-
-            $asset = Asset::find($this->chosenResearchId);
-            $researchInProgress = ColonyAsset::where([
-                'colony_id' => $this->colony->id,
-                'asset_id' => $this->chosenResearchId,
-            ])->first();
-
-            $newProgress = ($researchInProgress->xp ?? 0) + $xp;
-
-            // Finish
-            if ($newProgress >= $asset->xp) {
-                $newProgress = $asset->xp;
-
-                $xp = $asset->xp - ($researchInProgress->xp ?? 0);
-
-                $this->chosenResearchId = 0;
-            }
-
-            ColonyAsset::upsert([
-                'xp' => $newProgress,
-                'colony_id' => $this->colony->id,
-                'asset_id' => $asset->id,
-            ], [
-                'colony_id',
-                'asset_id',
-            ], [
-                'xp',
-            ]);
-
-            Session::push('messages', "Scientists researched $xp of $asset->name.");
-        }
     }
 }

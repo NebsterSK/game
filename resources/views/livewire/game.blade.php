@@ -10,7 +10,7 @@
 
     <div class="row">
         <div class="col-6">
-            <h2>Population</h2>
+            <h2>Population & Roles</h2>
 
             <p>Available population: <span x-text="$wire.population"></span></p>
 
