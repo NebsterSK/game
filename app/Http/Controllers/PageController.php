@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PageController extends Controller
@@ -17,8 +16,8 @@ class PageController extends Controller
         return view('dashboard');
     }
 
-//    public function profile(): View
-//    {
-//        return view('profile');
-//    }
+    //    public function profile(): View
+    //    {
+    //        return view('profile');
+    //    }
 }
