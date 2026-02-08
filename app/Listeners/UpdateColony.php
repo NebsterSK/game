@@ -20,7 +20,7 @@ class UpdateColony
         ]);
 
         if ($event->game->colony->population > 0) {
-            Session::push('messages', 'We have available population that is not assigned to any role.');
+            Session::push('messages', 'We have available population ('.$event->game->colony->population.') that is not assigned to any role.');
         }
     }
 }

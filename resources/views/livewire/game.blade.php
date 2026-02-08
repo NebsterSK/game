@@ -9,10 +9,10 @@
     <hr>
 
     <div class="row">
-        <div class="col-6">
-            <h2>Population & Roles</h2>
+        <div class="col-8">
+            <h2>Crew</h2>
 
-            <p>Available population: <span x-text="$wire.population"></span></p>
+            <p>Resting: <span x-text="$wire.population"></span></p>
 
             <div class="input-group mb-3">
                 <span class="input-group-text">Builders</span>
@@ -115,8 +115,8 @@
             @endif
         </div>
 
-        <div class="col-6">
-            <h2>Commander's log</h2>
+        <div class="col-4">
+            <h2>Log</h2>
 
             <code>
                 @if(Session::has('messages'))

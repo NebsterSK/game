@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ColonyAsset> $colonyAssets
  * @property-read int|null $colony_assets_count
  * @property-read \App\Models\User $user
+ *
  * @method static \Database\Factories\ColonyFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony newQuery()
@@ -37,12 +38,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereTurn($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Colony extends Model
 {
     /** @use HasFactory<\Database\Factories\ColonyFactory> */
     use HasFactory;
+
     use HasUuids;
 
     protected $fillable = [
@@ -59,10 +62,10 @@ class Colony extends Model
         return $this->belongsTo(User::class);
     }
 
-//    public function assets(): BelongsToMany
-//    {
-//        return $this->belongsToMany(Asset::class, 'colony_asset')->withPivot(['xp']);
-//    }
+    //    public function assets(): BelongsToMany
+    //    {
+    //        return $this->belongsToMany(Asset::class, 'colony_asset')->withPivot(['xp']);
+    //    }
 
     public function colonyAssets(): HasMany
     {

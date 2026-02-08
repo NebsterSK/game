@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\AssetFinished;
 use App\Events\TurnEnded;
+use App\Listeners\ListUnlockedAssets;
 use App\Listeners\ProgressBuilding;
 use App\Listeners\ProgressResearch;
 use App\Listeners\ProgressTechnology;
@@ -12,16 +14,15 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    public function register(): void
-    {
-
-    }
+    public function register(): void {}
 
     public function boot(): void
     {
-        Event::listen(TurnEnded::class,UpdateColony::class);
-        Event::listen(TurnEnded::class,ProgressBuilding::class);
-        Event::listen(TurnEnded::class,ProgressTechnology::class);
-        Event::listen(TurnEnded::class,ProgressResearch::class);
+        Event::listen(TurnEnded::class, UpdateColony::class);
+        Event::listen(TurnEnded::class, ProgressBuilding::class);
+        Event::listen(TurnEnded::class, ProgressTechnology::class);
+        Event::listen(TurnEnded::class, ProgressResearch::class);
+
+        Event::listen(AssetFinished::class, ListUnlockedAssets::class);
     }
 }

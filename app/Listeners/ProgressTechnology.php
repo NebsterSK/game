@@ -2,11 +2,13 @@
 
 namespace App\Listeners;
 
+use App\Events\AssetFinished;
 use App\Events\TurnEnded;
 use App\Models\Asset;
 use App\Models\ColonyAsset;
 use Illuminate\Support\Facades\Session;
 
+// TODO: Refactor to remove duplication with ProgressBuilding and ProgressTechnology
 class ProgressTechnology
 {
     public function handle(TurnEnded $event): void
@@ -30,7 +32,7 @@ class ProgressTechnology
 
                 Session::push('messages', "Engineers finished developing $asset->name.");
 
-                // TODO: AssetFinishedEvent
+                AssetFinished::dispatch($asset);
             } else {
                 Session::push('messages', "Engineers developed $xp of $asset->name.");
             }
