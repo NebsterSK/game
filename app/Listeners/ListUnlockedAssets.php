@@ -14,7 +14,7 @@ class ListUnlockedAssets
         $unlockedAssets = Asset::where('parent_id', $event->asset->id)->orderBy('type')->get();
 
         foreach ($unlockedAssets as $asset) {
-            Session::push('messages', $asset->type->toCrewType()->toUpperCase().' can now '.$asset->type->toVerb()." $asset->name.");
+            Session::push('messages', $asset->type->toCrewType()->toUcFirst().'s can now '.$asset->type->toVerb()." $asset->name.");
         }
     }
 }

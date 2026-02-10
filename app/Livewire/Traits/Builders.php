@@ -8,29 +8,28 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Validate;
 
 /**
  * @property Collection $buildings
  */
 trait Builders
 {
-    public int $builders;
+    #[Validate('required|integer|min:0')]
+    public int $builders = 0;
 
     public int $chosenBuildingId = 0;
 
     #[Computed]
-    public function buildings(): Collection
+    public function availableBuildings(): Collection
     {
-        $finishedBuildings = Asset::whereRelation('colonyAsset', 'colony_id', '=', $this->colony->id)
-            ->whereRelation('colonyAsset', 'colony_asset.xp', '=', DB::raw('assets.xp'))
-            ->get('id')
-            ->pluck('id');
+        $finishedBuildingIds = $this->finishedAssets->pluck('id');
 
         return Asset::with('colonyAsset')
             ->where('type', AssetType::Building->value)
-            ->whereNotIn('id', $finishedBuildings)
-            ->where(function (Builder $q) use ($finishedBuildings) {
-                $q->whereIn('parent_id', $finishedBuildings)
+            ->whereNotIn('id', $finishedBuildingIds)
+            ->where(function (Builder $q) use ($finishedBuildingIds) {
+                $q->whereIn('parent_id', $finishedBuildingIds)
                     ->orWhereNull('parent_id');
             })
             ->orderBy('name')

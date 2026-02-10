@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Asset $asset
  * @property-read \App\Models\Colony $colony
- *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ColonyAsset newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ColonyAsset newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ColonyAsset query()
@@ -24,7 +23,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ColonyAsset whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ColonyAsset whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ColonyAsset whereXp($value)
- *
  * @mixin \Eloquent
  */
 class ColonyAsset extends Model

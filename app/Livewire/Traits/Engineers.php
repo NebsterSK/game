@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Validate;
 
 /**
  * @property Collection $technologies
@@ -15,23 +16,21 @@ use Livewire\Attributes\Computed;
  */
 trait Engineers
 {
-    public int $engineers;
+    #[Validate('required|integer|min:0')]
+    public int $engineers = 0;
 
     public int $chosenTechnologyId = 0;
 
     #[Computed]
-    public function technologies(): Collection
+    public function availableTechnologies(): Collection
     {
-        $finishedTechnologies = Asset::whereRelation('colonyAsset', 'colony_id', '=', $this->colony->id)
-            ->whereRelation('colonyAsset', 'colony_asset.xp', '=', DB::raw('assets.xp'))
-            ->get('id')
-            ->pluck('id');
+        $finishedTechnologyIds = $this->finishedAssets->pluck('id');
 
         return Asset::with('colonyAsset')
             ->where('type', AssetType::Technology->value)
-            ->whereNotIn('id', $finishedTechnologies)
-            ->where(function (Builder $q) use ($finishedTechnologies) {
-                $q->whereIn('parent_id', $finishedTechnologies)
+            ->whereNotIn('id', $finishedTechnologyIds)
+            ->where(function (Builder $q) use ($finishedTechnologyIds) {
+                $q->whereIn('parent_id', $finishedTechnologyIds)
                     ->orWhereNull('parent_id');
             })
             ->orderBy('name')

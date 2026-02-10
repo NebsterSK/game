@@ -23,7 +23,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ColonyAsset> $colonyAssets
  * @property-read int|null $colony_assets_count
  * @property-read \App\Models\User $user
- *
  * @method static \Database\Factories\ColonyFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony newQuery()
@@ -38,7 +37,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereTurn($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereUserId($value)
- *
  * @mixin \Eloquent
  */
 class Colony extends Model

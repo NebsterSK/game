@@ -1,7 +1,10 @@
 @use(Illuminate\Support\Carbon)
+@use(Illuminate\Support\Facades\Auth)
 
 <div>
     <h1>{{ $this->colony->name }}</h1>
+
+    <p class="lead mb-0">Commander: {{ Auth::user()->name }}</p>
 
 {{--    <p>Turn: {{ $this->colony->turn }} | Earth date: {{ Carbon::make(config('game.starting_earth_date'))->addDays($this->colony->turn * 10)->toDateString() }}</p>--}}
     <p>Turn: {{ $this->colony->turn }}</p>
@@ -14,119 +17,17 @@
 
             <p>Resting: <span x-text="$wire.population"></span></p>
 
-            <div class="input-group mb-3">
-                <span class="input-group-text">Builders</span>
+            @include('livewire.includes.builders')
 
-                <button
-                    x-on:click="if ($wire.builders > 0) {$wire.builders--;$wire.population++}"
-                    class="btn btn-outline-primary"
-                >-</button>
+            @include('livewire.includes.engineers')
 
-                <span
-                    x-text="$wire.builders"
-                    class="input-group-text"
-                ></span>
-
-                <button
-                    x-on:click="if ($wire.population > 0) {$wire.builders++;$wire.population--}"
-                    class="btn btn-outline-primary"
-                >+</button>
-
-                <label class="input-group-text">build</label>
-
-                <select
-                    wire:model="chosenBuildingId"
-                    wire:loading.attr="disabled"
-                    class="form-select"
-                >
-                    <option value="0">Nothing</option>
-                    @foreach($this->buildings as $building)
-                        <option wire:key="{{ $building->id }}" value="{{ $building->id }}">{{ $building->name }} | Progress: {{ $building->colonyAsset->xp ?? 0 }} / {{ $building->xp }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            @if($this->workshopIsBuilt)
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Engineers</span>
-
-                    <button
-                        x-on:click="if ($wire.engineers > 0) {$wire.engineers--;$wire.population++}"
-                        class="btn btn-outline-primary"
-                    >-</button>
-
-                    <span
-                        x-text="$wire.engineers"
-                        class="input-group-text"
-                    ></span>
-
-                    <button
-                        x-on:click="if ($wire.population > 0) {$wire.engineers++;$wire.population--}"
-                        class="btn btn-outline-primary"
-                    >+</button>
-
-                    <label class="input-group-text">develop</label>
-
-                    <select
-                        wire:model="chosenTechnologyId"
-                        wire:loading.attr="disabled"
-                        class="form-select"
-                    >
-                        <option value="0">Nothing</option>
-                        @foreach($this->technologies as $technology)
-                            <option wire:key="{{ $technology->id }}" value="{{ $technology->id }}">{{ $technology->name }} | Progress: {{ $technology->colonyAsset->xp ?? 0 }} / {{ $technology->xp }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            @endif
-
-            @if($this->laboratoryIsBuilt)
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Scientists</span>
-
-                    <button
-                        x-on:click="if ($wire.scientists > 0) {$wire.scientists--;$wire.population++}"
-                        class="btn btn-outline-primary"
-                    >-</button>
-
-                    <span
-                        x-text="$wire.scientists"
-                        class="input-group-text"
-                    ></span>
-
-                    <button
-                        x-on:click="if ($wire.population > 0) {$wire.scientists++;$wire.population--}"
-                        class="btn btn-outline-primary"
-                    >+</button>
-
-                    <label class="input-group-text">research</label>
-
-                    <select
-                        wire:model="chosenResearchId"
-                        wire:loading.attr="disabled"
-                        class="form-select"
-                    >
-                        <option value="0">Nothing</option>
-                        @foreach($this->researches as $research)
-                            <option wire:key="{{ $research->id }}" value="{{ $research->id }}">{{ $research->name }} | Progress: {{ $research->colonyAsset->xp ?? 0 }} / {{ $research->xp }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            @endif
+            @include('livewire.includes.scientists')
         </div>
 
         <div class="col-4">
             <h2>Log</h2>
 
-            <code>
-                @if(Session::has('messages'))
-                    <ul>
-                        @foreach(Session::get('messages') as $message)
-                            <li>{{ $message }}</li>
-                        @endforeach
-                    </ul>
-                @endif
-            </code>
+            @include('livewire.includes.log')
         </div>
     </div>
 
@@ -149,3 +50,21 @@
         >End turn</button>
     </div>
 </div>
+
+@script
+<script>
+    $js('decreaseRole', function (role) {
+        if ($wire[role] > 0) {
+            $wire[role]--;
+            $wire.population++;
+        }
+    });
+
+    $js('increaseRole', function (role) {
+        if ($wire.population > 0) {
+            $wire[role]++;
+            $wire.population--;
+        }
+    });
+</script>
+@endscript

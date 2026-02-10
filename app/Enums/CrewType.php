@@ -10,8 +10,8 @@ enum CrewType: string
     case Engineer = 'engineer';
     case Scientist = 'scientist';
 
-    public function toUpperCase(): string
+    public function toUcFirst(): string
     {
-        return Str::upper($this->value);
+        return Str::of($this->value)->ucfirst();
     }
 }
