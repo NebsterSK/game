@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\AssetType;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -13,9 +15,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property AssetType $type
  * @property int $xp
  * @property int|null $parent_id
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ColonyAsset> $colonies
+ * @property-read Collection<int, ColonyAsset> $colonies
  * @property-read int|null $colonies_count
- * @property-read \App\Models\ColonyAsset|null $colonyAsset
+ * @property-read ColonyAsset|null $colonyAsset
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset query()
@@ -24,20 +27,18 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereParentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereXp($value)
+ *
  * @mixin \Eloquent
  */
+#[Fillable(['name', 'type', 'xp', 'parent_id'])]
 class Asset extends Model
 {
-    protected $fillable = [
-        'name',
-        'type',
-        'xp',
-        'parent_id',
-    ];
-
-    protected $casts = [
-        'type' => AssetType::class,
-    ];
+    protected function casts(): array
+    {
+        return [
+            'type' => AssetType::class,
+        ];
+    }
 
     // Relations
     public function colonies(): BelongsToMany

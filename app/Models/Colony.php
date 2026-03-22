@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Database\Factories\ColonyFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * @property string $id
@@ -18,11 +21,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $engineers
  * @property int $scientists
  * @property int $user_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ColonyAsset> $colonyAssets
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, ColonyAsset> $colonyAssets
  * @property-read int|null $colony_assets_count
- * @property-read \App\Models\User $user
+ * @property-read User $user
+ *
  * @method static \Database\Factories\ColonyFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony newQuery()
@@ -37,22 +41,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereTurn($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereUserId($value)
+ *
  * @mixin \Eloquent
  */
+#[Fillable(['turn', 'population', 'builders', 'engineers', 'scientists'])]
 class Colony extends Model
 {
-    /** @use HasFactory<\Database\Factories\ColonyFactory> */
+    /** @use HasFactory<ColonyFactory> */
     use HasFactory;
 
     use HasUuids;
-
-    protected $fillable = [
-        'turn',
-        'population',
-        'builders',
-        'engineers',
-        'scientists',
-    ];
 
     // Relations
     public function user(): BelongsTo

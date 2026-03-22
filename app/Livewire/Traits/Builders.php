@@ -6,7 +6,6 @@ use App\Enums\AssetType;
 use App\Models\Asset;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Validate;
 
