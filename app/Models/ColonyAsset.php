@@ -15,9 +15,8 @@ use Illuminate\Support\Carbon;
  * @property int $xp
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Asset $asset
- * @property-read Colony $colony
- *
+ * @property-read \App\Models\Asset $asset
+ * @property-read \App\Models\Colony $colony
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ColonyAsset newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ColonyAsset newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ColonyAsset query()
@@ -27,7 +26,6 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ColonyAsset whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ColonyAsset whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ColonyAsset whereXp($value)
- *
  * @mixin \Eloquent
  */
 #[Table('colony_asset')]

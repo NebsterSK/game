@@ -4,7 +4,7 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "watch": "vite"
     },
     "dependencies": {
         "fastbootstrap": "^2.2.0",
