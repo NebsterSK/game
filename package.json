@@ -1,4 +1,5 @@
 {
+    "$schema": "https://www.schemastore.org/package.json",
     "private": true,
     "type": "module",
     "scripts": {
@@ -7,8 +8,11 @@
     },
     "dependencies": {
         "fastbootstrap": "^2.2.0",
-        "laravel-vite-plugin": "^1.0",
-        "sass": "^1.56.1",
-        "vite": "^6.0"
+        "sass": "^1.86.0"
+    },
+    "devDependencies": {
+        "concurrently": "^9.0.1",
+        "laravel-vite-plugin": "^2.0.0",
+        "vite": "^7.0.0"
     }
 }
