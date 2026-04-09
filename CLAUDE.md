@@ -17,9 +17,8 @@ Turn-based space strategy game built with Laravel 12 and Livewire 4. Players man
 ## Commands
 
 ```bash
-composer dev          # Start dev server, queue worker, and Vite
-composer test         # Run PHPUnit tests (clears config first)
 composer pint         # Format code with Laravel Pint
+composer larastan     # Run static analysis with Larastan
 npm run build         # Build production assets
 npm run watch         # Watch assets for changes
 php artisan migrate   # Run database migrations

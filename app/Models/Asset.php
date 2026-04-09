@@ -15,9 +15,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property AssetType $type
  * @property int $xp
  * @property int|null $parent_id
- * @property-read Collection<int, \App\Models\ColonyAsset> $colonies
+ * @property-read Collection<int, ColonyAsset> $colonies
  * @property-read int|null $colonies_count
- * @property-read \App\Models\ColonyAsset|null $colonyAsset
+ * @property-read ColonyAsset|null $colonyAsset
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset query()
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereParentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereXp($value)
+ *
  * @mixin \Eloquent
  */
 #[Fillable(['name', 'type', 'xp', 'parent_id'])]
