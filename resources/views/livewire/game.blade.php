@@ -53,18 +53,18 @@
 
 @script
 <script>
-    $js('decreaseRole', function (role) {
+    $wire.$js.decreaseRole = function (role) {
         if ($wire[role] > 0) {
             $wire[role]--;
             $wire.population++;
         }
-    });
+    };
 
-    $js('increaseRole', function (role) {
+    $wire.$js.increaseRole = function (role) {
         if ($wire.population > 0) {
             $wire[role]++;
             $wire.population--;
         }
-    });
+    };
 </script>
 @endscript

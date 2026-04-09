@@ -1,12 +1,14 @@
 # CLAUDE.md
 
+- This project is located in `E:/webs/game`.
+
 ## Project Overview
 
-Turn-based space strategy game built with Laravel 12 and Livewire 3. Players manage space colonies, assign crew (builders, engineers, scientists), and build assets.
+Turn-based space strategy game built with Laravel 12 and Livewire 4. Players manage space colonies, assign crew (builders, engineers, scientists), and build assets.
 
 ## Tech Stack
 
-- **Backend:** PHP 8.5, Laravel 12, Livewire 3
+- **Backend:** PHP 8.5, Laravel 12, Livewire 4
 - **Frontend:** Blade templates, Alpine.js, FastBootstrap (dark theme)
 - **Build:** Vite 6 with Sass/SCSS
 - **Database:** SQLite (default), Eloquent ORM
