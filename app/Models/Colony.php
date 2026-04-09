@@ -23,10 +23,9 @@ use Illuminate\Support\Carbon;
  * @property int $user_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection<int, ColonyAsset> $colonyAssets
+ * @property-read Collection<int, \App\Models\ColonyAsset> $colonyAssets
  * @property-read int|null $colony_assets_count
- * @property-read User $user
- *
+ * @property-read \App\Models\User $user
  * @method static \Database\Factories\ColonyFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony newQuery()
@@ -41,7 +40,6 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereTurn($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Colony whereUserId($value)
- *
  * @mixin \Eloquent
  */
 #[Fillable(['turn', 'population', 'builders', 'engineers', 'scientists'])]
